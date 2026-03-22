@@ -1,0 +1,44 @@
+{
+    "name": "puzl/pzpdf-fpdf",
+    "description": "Fluent PDF wrapper built on FPDF for the Puzl ecosystem",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "fawno/fpdf": "^1.9",
+        "illuminate/console": "^10.0|^11.0|^12.0",
+        "illuminate/support": "^10.0|^11.0|^12.0",
+        "kaareln/php-svg-path-data": "^1.0",
+        "nesbot/carbon": "^3.0"
+    },
+    "require-dev": {
+        "brianium/paratest": "^7.3",
+        "phpunit/phpunit": "^10.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Puzl\\PzPdf\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Puzl\\PzPdf\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit -c phpunit.xml.dist",
+        "test:parallel": "paratest -c phpunit.xml.dist --processes=4",
+        "test:coverage": "phpunit -c phpunit.xml.dist --coverage-text",
+        "check:prefix": "php bin/check-pzpdf-prefix.php"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Puzl\\PzPdf\\Laravel\\PzPdfServiceProvider"
+            ]
+        }
+    }
+}
