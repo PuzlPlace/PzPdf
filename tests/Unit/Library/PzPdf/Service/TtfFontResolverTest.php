@@ -56,7 +56,7 @@ final class TtfFontResolverTest extends TestCase
     public function testThrowsWhenInjectedMakefontScriptMissing(): void
     {
         $projectRoot = dirname(__DIR__, 5);
-        $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'fixtures'.DIRECTORY_SEPARATOR.'fonts'
+        $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
             .DIRECTORY_SEPARATOR.'DejaVuSans.ttf';
         if (! is_file($font)) {
             self::markTestSkipped('Fixture DejaVuSans.ttf ausente.');
@@ -83,7 +83,7 @@ final class TtfFontResolverTest extends TestCase
     public function testThrowsWhenMakefontProducesTinyFontPhp(): void
     {
         $projectRoot = dirname(__DIR__, 5);
-        $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'fixtures'.DIRECTORY_SEPARATOR.'fonts'
+        $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
             .DIRECTORY_SEPARATOR.'DejaVuSans.ttf';
         if (! is_file($font)) {
             self::markTestSkipped('Fixture DejaVuSans.ttf ausente.');
@@ -125,7 +125,7 @@ PHP
     public function testThrowsWhenMakefontProducesEmptyFontZ(): void
     {
         $projectRoot = dirname(__DIR__, 5);
-        $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'fixtures'.DIRECTORY_SEPARATOR.'fonts'
+        $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
             .DIRECTORY_SEPARATOR.'DejaVuSans.ttf';
         if (! is_file($font)) {
             self::markTestSkipped('Fixture DejaVuSans.ttf ausente.');
@@ -167,7 +167,7 @@ PHP
     public function testMakefontProcessFailureThrowsWithExitCode(): void
     {
         $projectRoot = dirname(__DIR__, 5);
-        $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'fixtures'.DIRECTORY_SEPARATOR.'fonts'
+        $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
             .DIRECTORY_SEPARATOR.'DejaVuSans.ttf';
         if (! is_file($font)) {
             self::markTestSkipped('Fixture DejaVuSans.ttf ausente.');
@@ -198,7 +198,7 @@ PHP
     public function testRebuildsWhenCompleteMarkerJsonIsInvalid(): void
     {
         $projectRoot = dirname(__DIR__, 5);
-        $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'fixtures'.DIRECTORY_SEPARATOR.'fonts'
+        $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
             .DIRECTORY_SEPARATOR.'DejaVuSans.ttf';
         if (! is_file($font)) {
             self::markTestSkipped('Fixture DejaVuSans.ttf ausente.');
@@ -225,7 +225,7 @@ PHP
     public function testRebuildsWhenCompleteMarkerVersionIsStale(): void
     {
         $projectRoot = dirname(__DIR__, 5);
-        $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'fixtures'.DIRECTORY_SEPARATOR.'fonts'
+        $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
             .DIRECTORY_SEPARATOR.'DejaVuSans.ttf';
         if (! is_file($font)) {
             self::markTestSkipped('Fixture DejaVuSans.ttf ausente.');
@@ -258,7 +258,7 @@ PHP
     public function testRebuildsWhenCompleteMarkerSha256Mismatch(): void
     {
         $projectRoot = dirname(__DIR__, 5);
-        $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'fixtures'.DIRECTORY_SEPARATOR.'fonts'
+        $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
             .DIRECTORY_SEPARATOR.'DejaVuSans.ttf';
         if (! is_file($font)) {
             self::markTestSkipped('Fixture DejaVuSans.ttf ausente.');
@@ -290,10 +290,10 @@ PHP
     public function testInstanceCacheReturnsSameObjectForRepeatedCalls(): void
     {
         $projectRoot = dirname(__DIR__, 5);
-        $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'fixtures'.DIRECTORY_SEPARATOR.'fonts'
+        $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
             .DIRECTORY_SEPARATOR.'DejaVuSans.ttf';
         if (! is_file($font)) {
-            self::markTestSkipped('Fixture DejaVuSans.ttf ausente (copie tests/fixtures/fonts).');
+            self::markTestSkipped('Fixture DejaVuSans.ttf ausente (copie tests/Fixtures/fonts).');
         }
 
         $cache = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pzpdf_unit_ttf_cache_'.uniqid('', true);

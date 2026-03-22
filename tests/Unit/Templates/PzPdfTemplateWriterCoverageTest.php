@@ -13,8 +13,8 @@ use Puzl\PzPdf\Enum\PzPdfPageSize;
 use Puzl\PzPdf\Exception\PzPdfException;
 use Puzl\PzPdf\PzPdfFactory;
 use Puzl\PzPdf\Templates\PzPdfTemplateWriter;
-use Puzl\PzPdf\Tests\Fixture\Templates\ConcretePzPdfTemplateForTests;
-use Puzl\PzPdf\Tests\Fixture\Templates\PzPdfTemplateWriterCoverageStub;
+use Puzl\PzPdf\Tests\Fixtures\Templates\ConcretePzPdfTemplateForTests;
+use Puzl\PzPdf\Tests\Fixtures\Templates\PzPdfTemplateWriterCoverageStub;
 
 #[CoversClass(PzPdfTemplateWriter::class)]
 final class PzPdfTemplateWriterCoverageTest extends TestCase
@@ -22,7 +22,7 @@ final class PzPdfTemplateWriterCoverageTest extends TestCase
     public function testDrawingHelpersExecuteAgainstPdf(): void
     {
         $root = dirname(__DIR__, 3);
-        $ttf = $root.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'fixtures'.DIRECTORY_SEPARATOR.'fonts'
+        $ttf = $root.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
             .DIRECTORY_SEPARATOR.'DejaVuSans.ttf';
         if (! is_file($ttf)) {
             self::markTestSkipped('Fixture DejaVuSans.ttf ausente.');

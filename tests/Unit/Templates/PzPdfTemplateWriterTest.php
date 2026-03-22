@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Puzl\PzPdf\Config\PzPdfConfiguration;
 use Puzl\PzPdf\Templates\PzPdfTemplateWriter;
-use Puzl\PzPdf\Tests\Fixture\Templates\PzPdfTemplateWriterTestStub;
+use Puzl\PzPdf\Tests\Fixtures\Templates\PzPdfTemplateWriterTestStub;
 
 #[CoversClass(PzPdfTemplateWriter::class)]
 final class PzPdfTemplateWriterTest extends TestCase

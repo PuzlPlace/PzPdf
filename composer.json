@@ -28,8 +28,7 @@
     "scripts": {
         "test": "phpunit -c phpunit.xml.dist",
         "test:parallel": "paratest -c phpunit.xml.dist --processes=4",
-        "test:coverage": "phpunit -c phpunit.xml.dist --coverage-text",
-        "check:prefix": "php bin/check-pzpdf-prefix.php"
+        "test:coverage": "phpunit -c phpunit.xml.dist --coverage-text"
     },
     "config": {
         "sort-packages": true

@@ -23,6 +23,7 @@ Thumbs.db
 # Artefatos locais de PDF
 *.pdf
 !**/fixtures/**/*.pdf
+!**/Fixtures/**/*.pdf
 
 # Node (se usar tooling front na doc)
 node_modules/

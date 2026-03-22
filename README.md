@@ -96,7 +96,6 @@ Abrir [http://localhost:8765/index.html](http://localhost:8765/index.html).
 composer install
 composer test
 composer test:parallel
-composer check:prefix
 ```
 
 ## Estrutura
