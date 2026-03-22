@@ -12,16 +12,16 @@ use Puzl\PzPdf\Exception\PzPdfException;
  *
  * Cada componente (cyan, magenta, yellow, black) deve estar no range 0-100.
  */
-final readonly class PzPdfCmykColor implements PzPdfColorInterface
+final class PzPdfCmykColor implements PzPdfColorInterface
 {
     /**
      * @throws PzPdfException Se qualquer componente estiver fora do range 0-100
      */
     public function __construct(
-        public int $cyan,
-        public int $magenta,
-        public int $yellow,
-        public int $black,
+        public readonly int $cyan,
+        public readonly int $magenta,
+        public readonly int $yellow,
+        public readonly int $black,
     ) {
         self::validateComponent('cyan', $cyan);
         self::validateComponent('magenta', $magenta);

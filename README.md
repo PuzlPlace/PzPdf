@@ -4,7 +4,7 @@ Biblioteca PHP **PzPdf**: API fluente para PDF com **FPDF** (`fawno/fpdf`), pens
 
 ## Requisitos
 
-- PHP **8.2+**
+- PHP **8.1+**
 - Laravel **10+** (opcional, para auto-discovery, config e comando `pzpdf:install`)
 - Extensão **`mbstring`**
 - [Composer](https://getcomposer.org/)

@@ -12,15 +12,15 @@ use Puzl\PzPdf\Exception\PzPdfException;
  *
  * Cada componente (red, green, blue) deve estar no range 0-255.
  */
-final readonly class PzPdfColor implements PzPdfColorInterface
+final class PzPdfColor implements PzPdfColorInterface
 {
     /**
      * @throws PzPdfException Se qualquer componente estiver fora do range 0-255
      */
     public function __construct(
-        public int $red,
-        public int $green,
-        public int $blue,
+        public readonly int $red,
+        public readonly int $green,
+        public readonly int $blue,
     ) {
         self::validateComponent('red', $red);
         self::validateComponent('green', $green);

@@ -24,11 +24,10 @@ Thumbs.db
 *.pdf
 !**/fixtures/**/*.pdf
 !**/Fixtures/**/*.pdf
-!storage/app/bill_receive_report_pzpdf_min_3_pages.pdf
-!storage/app/relatorio_contas_receber_procedural_inter_tipografia_1000p.pdf
 
-# PDFs e caches temporários gerados por testes
-/storage/app/tmp/
+# Conteúdo local em storage/app (PDFs gerados, tmp, etc.)
+/storage/app/*
+!/storage/app/.gitkeep
 
 # Node (se usar tooling front na doc)
 node_modules/

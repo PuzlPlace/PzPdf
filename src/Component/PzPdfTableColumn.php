@@ -15,7 +15,7 @@ use Puzl\PzPdf\Exception\PzPdfException;
  *
  * @example new PzPdfTableColumn(label: 'Nome', width: 50, align: PzPdfTextAlignment::Left)
  */
-final readonly class PzPdfTableColumn
+final class PzPdfTableColumn
 {
     /**
      * @param  string  $label  Texto do cabeçalho da coluna (UTF-8)
@@ -25,9 +25,9 @@ final readonly class PzPdfTableColumn
      * @throws PzPdfException Se {@see $width} for menor ou igual a zero
      */
     public function __construct(
-        public string $label,
-        public float $width,
-        public PzPdfTextAlignment $align = PzPdfTextAlignment::Left,
+        public readonly string $label,
+        public readonly float $width,
+        public readonly PzPdfTextAlignment $align = PzPdfTextAlignment::Left,
     ) {
         if ($width <= 0.0) {
             throw new PzPdfException(
