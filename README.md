@@ -11,26 +11,42 @@ Biblioteca PHP **PzPdf**: API fluente para PDF com **FPDF** (`fawno/fpdf`), pens
 
 ## Instalação no Laravel
 
-Repositório privado (exemplo):
+Use sempre o branch **`production`** para instalar o pacote num projeto Laravel. **Não** use `master` para essa instalação — o código estável para consumo fica em `production`.
 
-```json
-{
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/SUA_ORG/PzPdf.git"
-        }
-    ],
-    "require": {
-        "puzl/pzpdf": "dev-main"
-    }
-}
-```
+### Passo a passo
 
-```bash
-composer require puzl/pzpdf
-php artisan pzpdf:install
-```
+1. **Abrir o `composer.json` do projeto Laravel** e adicionar o repositório VCS (ajuste a URL ao repositório real):
+
+   ```json
+   {
+       "repositories": [
+           {
+               "type": "vcs",
+               "url": "https://github.com/SUA_ORG/PzPdf.git"
+           }
+       ]
+   }
+   ```
+
+2. **Instalar a versão do branch `production`**. No Composer, branches têm o prefixo `dev-`; para `production` use `dev-production`:
+
+   ```bash
+   composer require puzl/pzpdf:dev-production
+   ```
+
+   Alternativa equivalente: declarar no `composer.json` em `require` e correr `composer update`:
+
+   ```json
+   "require": {
+       "puzl/pzpdf": "dev-production"
+   }
+   ```
+
+3. **Publicar config e assets** no Laravel:
+
+   ```bash
+   php artisan pzpdf:install
+   ```
 
 O pacote regista automaticamente o `PzPdfServiceProvider` (via `extra.laravel` no Composer). O comando `pzpdf:install` publica `config/pzpdf.php` e, por defeito, copia logos para `public/vendor/puzl/pzpdf/img` (opcional para URLs públicas; o PDF usa os ficheiros em `vendor` por defeito).
 
