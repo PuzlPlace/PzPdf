@@ -15,7 +15,7 @@ use ReflectionClass;
 #[CoversClass(PzPdfGradientStop::class)]
 final class GradientStopTest extends TestCase
 {
-    public function testConstructorSetsPositionAndColor(): void
+    public function test_constructor_sets_position_and_color(): void
     {
         $color = PzPdfColor::rgb(255, 0, 0);
         $stop = new PzPdfGradientStop(0.25, $color);
@@ -24,7 +24,7 @@ final class GradientStopTest extends TestCase
         $this->assertSame($color, $stop->color);
     }
 
-    public function testAtFactoryCreatesInstance(): void
+    public function test_at_factory_creates_instance(): void
     {
         $color = PzPdfColor::rgb(255, 0, 0);
         $stop = PzPdfGradientStop::at(0.25, $color);
@@ -33,7 +33,7 @@ final class GradientStopTest extends TestCase
         $this->assertSame($color, $stop->color);
     }
 
-    public function testPositionZeroIsValid(): void
+    public function test_position_zero_is_valid(): void
     {
         $color = PzPdfColor::rgb(255, 0, 0);
         $stop = new PzPdfGradientStop(0.0, $color);
@@ -42,7 +42,7 @@ final class GradientStopTest extends TestCase
         $this->assertSame($color, $stop->color);
     }
 
-    public function testPositionOneIsValid(): void
+    public function test_position_one_is_valid(): void
     {
         $color = PzPdfColor::rgb(255, 0, 0);
         $stop = new PzPdfGradientStop(1.0, $color);
@@ -51,22 +51,22 @@ final class GradientStopTest extends TestCase
         $this->assertSame($color, $stop->color);
     }
 
-    public function testPositionBelowZeroThrowsException(): void
+    public function test_position_below_zero_throws_exception(): void
     {
         $this->expectException(PzPdfException::class);
-        $this->expectExceptionMessage('Posição de gradient stop inválida');
+        $this->expectExceptionMessage('Invalid gradient stop position');
 
         new PzPdfGradientStop(-0.1, PzPdfColor::rgb(255, 0, 0));
     }
 
-    public function testPositionAboveOneThrowsException(): void
+    public function test_position_above_one_throws_exception(): void
     {
         $this->expectException(PzPdfException::class);
 
         new PzPdfGradientStop(1.1, PzPdfColor::rgb(255, 0, 0));
     }
 
-    public function testPositionMiddleIsValid(): void
+    public function test_position_middle_is_valid(): void
     {
         $color = PzPdfColor::rgb(255, 0, 0);
         $stop = new PzPdfGradientStop(0.5, $color);
@@ -75,21 +75,21 @@ final class GradientStopTest extends TestCase
         $this->assertSame($color, $stop->color);
     }
 
-    public function testIsReadonly(): void
+    public function test_is_readonly(): void
     {
         $reflection = new ReflectionClass(PzPdfGradientStop::class);
 
         $this->assertTrue($reflection->isReadOnly());
     }
 
-    public function testAtReturnsGradientStopInstance(): void
+    public function test_at_returns_gradient_stop_instance(): void
     {
         $stop = PzPdfGradientStop::at(0.5, PzPdfColor::rgb(255, 0, 0));
 
         $this->assertInstanceOf(PzPdfGradientStop::class, $stop);
     }
 
-    public function testAcceptsCmykColor(): void
+    public function test_accepts_cmyk_color(): void
     {
         $cmyk = PzPdfCmykColor::cmyk(10, 20, 30, 40);
         $stop = PzPdfGradientStop::at(0.75, $cmyk);

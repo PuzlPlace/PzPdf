@@ -9,13 +9,13 @@ use Puzl\PzPdf\Enum\PzPdfFontStyle;
 use Puzl\PzPdf\Enum\PzPdfPageOrientation;
 use Puzl\PzPdf\Enum\PzPdfPageSize;
 use Puzl\PzPdf\Enum\PzPdfTextAlignment;
-use Puzl\PzPdf\PzPdfFactory;
+use Puzl\PzPdf\PzPdf;
 
 final class PzPdfGenerationTest extends TestCase
 {
-    public function testFactoryToTextToBinaryString(): void
+    public function test_factory_to_text_to_binary_string(): void
     {
-        $pdf = PzPdfFactory::make();
+        $pdf = new PzPdf;
 
         $binary = $pdf
             ->addPage(PzPdfPageOrientation::Portrait, PzPdfPageSize::A4)
@@ -28,14 +28,18 @@ final class PzPdfGenerationTest extends TestCase
         self::assertGreaterThan(200, strlen($binary));
     }
 
-    public function testSaveWritesNonEmptyFile(): void
+    public function test_save_writes_non_empty_file(): void
     {
-        $path = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR)
-            .DIRECTORY_SEPARATOR
-            .'pzpdf_task4_'.bin2hex(random_bytes(8)).'.pdf';
+        $root = dirname(__DIR__, 3);
+        $tmpDir = $root.DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'tmp';
+        if (! is_dir($tmpDir)) {
+            mkdir($tmpDir, 0775, true);
+        }
+
+        $path = $tmpDir.DIRECTORY_SEPARATOR.'pzpdf_task4_'.bin2hex(random_bytes(8)).'.pdf';
 
         try {
-            PzPdfFactory::make()
+            (new PzPdf)
                 ->addPage()
                 ->font('Helvetica', PzPdfFontStyle::Regular, 10)
                 ->cell(50, 8, 'file', 0, 1, PzPdfTextAlignment::Left, false)

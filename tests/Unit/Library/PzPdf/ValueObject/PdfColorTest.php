@@ -15,7 +15,7 @@ use Puzl\PzPdf\ValueObject\PzPdfColor;
 #[CoversClass(PzPdfColor::class)]
 final class PdfColorTest extends TestCase
 {
-    public function testRgbCreatesColorWithCorrectComponents(): void
+    public function test_rgb_creates_color_with_correct_components(): void
     {
         $color = PzPdfColor::rgb(51, 122, 183);
 
@@ -24,7 +24,7 @@ final class PdfColorTest extends TestCase
         $this->assertSame(183, $color->blue);
     }
 
-    public function testConstructorCreatesColorWithCorrectComponents(): void
+    public function test_constructor_creates_color_with_correct_components(): void
     {
         $color = new PzPdfColor(10, 20, 30);
 
@@ -33,7 +33,7 @@ final class PdfColorTest extends TestCase
         $this->assertSame(30, $color->blue);
     }
 
-    public function testRgbBoundaryValuesZero(): void
+    public function test_rgb_boundary_values_zero(): void
     {
         $color = PzPdfColor::rgb(0, 0, 0);
 
@@ -42,7 +42,7 @@ final class PdfColorTest extends TestCase
         $this->assertSame(0, $color->blue);
     }
 
-    public function testRgbBoundaryValues255(): void
+    public function test_rgb_boundary_values255(): void
     {
         $color = PzPdfColor::rgb(255, 255, 255);
 
@@ -51,7 +51,7 @@ final class PdfColorTest extends TestCase
         $this->assertSame(255, $color->blue);
     }
 
-    public function testHexWithHashCreatesCorrectColor(): void
+    public function test_hex_with_hash_creates_correct_color(): void
     {
         $color = PzPdfColor::hex('#337ab7');
 
@@ -60,7 +60,7 @@ final class PdfColorTest extends TestCase
         $this->assertSame(183, $color->blue);
     }
 
-    public function testHexWithoutHashCreatesCorrectColor(): void
+    public function test_hex_without_hash_creates_correct_color(): void
     {
         $color = PzPdfColor::hex('337ab7');
 
@@ -69,7 +69,7 @@ final class PdfColorTest extends TestCase
         $this->assertSame(183, $color->blue);
     }
 
-    public function testHexUppercaseCreatesCorrectColor(): void
+    public function test_hex_uppercase_creates_correct_color(): void
     {
         $color = PzPdfColor::hex('#FF00AA');
 
@@ -78,7 +78,7 @@ final class PdfColorTest extends TestCase
         $this->assertSame(170, $color->blue);
     }
 
-    public function testHexBlackCreatesCorrectColor(): void
+    public function test_hex_black_creates_correct_color(): void
     {
         $color = PzPdfColor::hex('#000000');
 
@@ -87,7 +87,7 @@ final class PdfColorTest extends TestCase
         $this->assertSame(0, $color->blue);
     }
 
-    public function testHexWhiteCreatesCorrectColor(): void
+    public function test_hex_white_creates_correct_color(): void
     {
         $color = PzPdfColor::hex('#ffffff');
 
@@ -96,7 +96,7 @@ final class PdfColorTest extends TestCase
         $this->assertSame(255, $color->blue);
     }
 
-    public function testWhiteFactoryReturnsCorrectColor(): void
+    public function test_white_factory_returns_correct_color(): void
     {
         $color = PzPdfColor::white();
 
@@ -105,7 +105,7 @@ final class PdfColorTest extends TestCase
         $this->assertSame(255, $color->blue);
     }
 
-    public function testBlackFactoryReturnsCorrectColor(): void
+    public function test_black_factory_returns_correct_color(): void
     {
         $color = PzPdfColor::black();
 
@@ -114,50 +114,50 @@ final class PdfColorTest extends TestCase
         $this->assertSame(0, $color->blue);
     }
 
-    public function testRedAbove255ThrowsException(): void
+    public function test_red_above255_throws_exception(): void
     {
         $this->expectException(PzPdfException::class);
-        $this->expectExceptionMessage('PzPdfColor: valor de red (300) fora do range 0-255.');
+        $this->expectExceptionMessage('PzPdfColor: red value (300) is out of range 0-255.');
 
         PzPdfColor::rgb(300, 0, 0);
     }
 
-    public function testGreenAbove255ThrowsException(): void
+    public function test_green_above255_throws_exception(): void
     {
         $this->expectException(PzPdfException::class);
-        $this->expectExceptionMessage('PzPdfColor: valor de green (256) fora do range 0-255.');
+        $this->expectExceptionMessage('PzPdfColor: green value (256) is out of range 0-255.');
 
         PzPdfColor::rgb(0, 256, 0);
     }
 
-    public function testBlueAbove255ThrowsException(): void
+    public function test_blue_above255_throws_exception(): void
     {
         $this->expectException(PzPdfException::class);
-        $this->expectExceptionMessage('PzPdfColor: valor de blue (999) fora do range 0-255.');
+        $this->expectExceptionMessage('PzPdfColor: blue value (999) is out of range 0-255.');
 
         PzPdfColor::rgb(0, 0, 999);
     }
 
-    public function testRedBelowZeroThrowsException(): void
+    public function test_red_below_zero_throws_exception(): void
     {
         $this->expectException(PzPdfException::class);
-        $this->expectExceptionMessage('PzPdfColor: valor de red (-1) fora do range 0-255.');
+        $this->expectExceptionMessage('PzPdfColor: red value (-1) is out of range 0-255.');
 
         PzPdfColor::rgb(-1, 0, 0);
     }
 
-    public function testGreenBelowZeroThrowsException(): void
+    public function test_green_below_zero_throws_exception(): void
     {
         $this->expectException(PzPdfException::class);
-        $this->expectExceptionMessage('PzPdfColor: valor de green (-50) fora do range 0-255.');
+        $this->expectExceptionMessage('PzPdfColor: green value (-50) is out of range 0-255.');
 
         PzPdfColor::rgb(0, -50, 0);
     }
 
-    public function testBlueBelowZeroThrowsException(): void
+    public function test_blue_below_zero_throws_exception(): void
     {
         $this->expectException(PzPdfException::class);
-        $this->expectExceptionMessage('PzPdfColor: valor de blue (-100) fora do range 0-255.');
+        $this->expectExceptionMessage('PzPdfColor: blue value (-100) is out of range 0-255.');
 
         PzPdfColor::rgb(0, 0, -100);
     }
@@ -180,15 +180,15 @@ final class PdfColorTest extends TestCase
     }
 
     #[DataProvider('invalidHexProvider')]
-    public function testHexInvalidFormatThrowsException(string $invalidHex): void
+    public function test_hex_invalid_format_throws_exception(string $invalidHex): void
     {
         $this->expectException(PzPdfException::class);
-        $this->expectExceptionMessageMatches('/PzPdfColor: valor hexadecimal .* inválido/');
+        $this->expectExceptionMessageMatches('/PzPdfColor: invalid hexadecimal value/');
 
         PzPdfColor::hex($invalidHex);
     }
 
-    public function testHexInvalidFormatExceptionContainsExpectedFormat(): void
+    public function test_hex_invalid_format_exception_contains_expected_format(): void
     {
         try {
             PzPdfColor::hex('xyz');
@@ -199,7 +199,7 @@ final class PdfColorTest extends TestCase
         }
     }
 
-    public function testReadonlyPropertiesCannotBeModified(): void
+    public function test_readonly_properties_cannot_be_modified(): void
     {
         $color = PzPdfColor::rgb(100, 150, 200);
 
@@ -209,7 +209,7 @@ final class PdfColorTest extends TestCase
         $color->red = 50;
     }
 
-    public function testHexAndRgbProduceSameResult(): void
+    public function test_hex_and_rgb_produce_same_result(): void
     {
         $fromHex = PzPdfColor::hex('#337ab7');
         $fromRgb = PzPdfColor::rgb(51, 122, 183);
@@ -219,37 +219,37 @@ final class PdfColorTest extends TestCase
         $this->assertSame($fromHex->blue, $fromRgb->blue);
     }
 
-    public function testImplementsPzPdfColorInterface(): void
+    public function test_implements_pz_pdf_color_interface(): void
     {
         $color = PzPdfColor::rgb(100, 150, 200);
 
         $this->assertInstanceOf(PzPdfColorInterface::class, $color);
     }
 
-    public function testToArrayReturnsRgbComponents(): void
+    public function test_to_array_returns_rgb_components(): void
     {
         $color = PzPdfColor::rgb(100, 150, 200);
 
         $this->assertSame([100, 150, 200], $color->toArray());
     }
 
-    public function testToArrayWithBlack(): void
+    public function test_to_array_with_black(): void
     {
         $this->assertSame([0, 0, 0], PzPdfColor::rgb(0, 0, 0)->toArray());
     }
 
-    public function testToArrayWithWhite(): void
+    public function test_to_array_with_white(): void
     {
         $this->assertSame([255, 255, 255], PzPdfColor::rgb(255, 255, 255)->toArray());
     }
 
-    public function testToArrayWithFactoryMethods(): void
+    public function test_to_array_with_factory_methods(): void
     {
         $this->assertSame([0, 0, 0], PzPdfColor::black()->toArray());
         $this->assertSame([255, 255, 255], PzPdfColor::white()->toArray());
     }
 
-    public function testToArrayFromHex(): void
+    public function test_to_array_from_hex(): void
     {
         $color = PzPdfColor::hex('#337ab7');
 

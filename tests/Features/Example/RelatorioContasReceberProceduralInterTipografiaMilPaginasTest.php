@@ -10,23 +10,21 @@ use PHPUnit\Framework\TestCase;
 use Puzl\PzPdf\Enum\PzPdfFontStyle;
 use Puzl\PzPdf\Enum\PzPdfTextAlignment;
 use Puzl\PzPdf\PzPdf;
-use Puzl\PzPdf\PzPdfFactory;
 use Puzl\PzPdf\ValueObject\PzPdfColor;
 
 /**
  * Mesmo layout do relatório procedural com tipografia Inter (cabeçalho, filtros, cards,
  * tabela com badge e status). Preenche até 1000 páginas com linhas sintéticas.
  *
- * O PDF permanece em tests/Fixtures/output/ para inspeção manual (sem unlink no término).
+ * O PDF permanece em storage/app/ para inspeção manual (sem unlink no término).
  */
 #[CoversClass(PzPdf::class)]
-#[CoversClass(PzPdfFactory::class)]
 #[Group('slow')]
 final class RelatorioContasReceberProceduralInterTipografiaMilPaginasTest extends TestCase
 {
     private const PAGINAS_ALVO = 1000;
 
-    public function testGeraRelatorioProceduralInterTipografiaMilPaginas(): void
+    public function test_gera_relatorio_procedural_inter_tipografia_mil_paginas(): void
     {
         $resource = [
             'start' => '01/03/26',
@@ -53,7 +51,7 @@ final class RelatorioContasReceberProceduralInterTipografiaMilPaginasTest extend
         self::assertFileExists($caminhoLogoHeader);
         self::assertFileExists($caminhoLogoRodape);
 
-        $diretorioOutputPdf = $raizProjeto.'/tests/Fixtures/output';
+        $diretorioOutputPdf = $raizProjeto.'/storage/app';
         if (! is_dir($diretorioOutputPdf)) {
             mkdir($diretorioOutputPdf, 0775, true);
         }
@@ -129,7 +127,7 @@ final class RelatorioContasReceberProceduralInterTipografiaMilPaginasTest extend
             };
         };
 
-        $pdf = PzPdfFactory::make();
+        $pdf = new PzPdf;
 
         $pdf->addFont($fonteCorpo, PzPdfFontStyle::Regular, 'Inter-Regular.php', $caminhoFontes)
             ->addFont($fonteCorpo, PzPdfFontStyle::Bold, 'Inter-Bold.php', $caminhoFontes);
@@ -507,7 +505,7 @@ final class RelatorioContasReceberProceduralInterTipografiaMilPaginasTest extend
             $pdf->textColor(PzPdfColor::black())
                 ->newLine($alturaLinhaParcela);
 
-            ++$iteracoes;
+            $iteracoes++;
         }
 
         self::assertSame(self::PAGINAS_ALVO, $pdf->pageNo(), 'Deve atingir exatamente a página alvo');

@@ -21,8 +21,8 @@ final readonly class PzPdfGradientStop
     ) {
         if ($position < 0.0 || $position > 1.0) {
             throw new PzPdfException(
-                "Posição de gradient stop inválida: {$position}. "
-                .'O valor deve estar entre 0.0 e 1.0.'
+                "Invalid gradient stop position: {$position}. "
+                .'The value must be between 0.0 and 1.0.'
             );
         }
     }

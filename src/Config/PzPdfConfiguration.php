@@ -9,7 +9,7 @@ use InvalidArgumentException;
 /**
  * Value object imutável com a configuração do PzPdf (mesma forma de array que {@code config/pzpdf.php}).
  *
- * O método {@see self::get()} aceita retorno e default tipados como {@code mixed} de propósito, alinhado à Tech Spec §3.1,
+ * O método {@see self::get()} aceita retorno e default tipados como {@code mixed} de propósito,
  * para acesso genérico por dot-notation sem perder flexibilidade de valores escalares e aninhados.
  */
 final readonly class PzPdfConfiguration
@@ -17,9 +17,7 @@ final readonly class PzPdfConfiguration
     /**
      * @param  array<string, mixed>  $data
      */
-    public function __construct(private array $data)
-    {
-    }
+    public function __construct(private array $data) {}
 
     /**
      * @param  array<string, mixed>  $data
@@ -33,8 +31,6 @@ final readonly class PzPdfConfiguration
 
     /**
      * Acesso por dot-notation (ex.: {@code fonts.directory}). Retorna {@code $default} se algum segmento não existir.
-     *
-     * @return mixed
      */
     public function get(string $dotPath, mixed $default = null): mixed
     {
@@ -83,32 +79,32 @@ final readonly class PzPdfConfiguration
             $type = get_debug_type($data[$key]);
             if ($type !== $expected) {
                 throw new InvalidArgumentException(
-                    "PzPdfConfiguration: a chave '{$key}' deve ser do tipo {$expected}, {$type} fornecido."
+                    "PzPdfConfiguration: key '{$key}' must be of type {$expected}, {$type} given."
                 );
             }
         }
 
         if (isset($data['fonts']['directory']) && ! is_string($data['fonts']['directory'])) {
             throw new InvalidArgumentException(
-                "PzPdfConfiguration: 'fonts.directory' deve ser string, ".get_debug_type($data['fonts']['directory']).' fornecido.'
+                "PzPdfConfiguration: 'fonts.directory' must be string, ".get_debug_type($data['fonts']['directory']).' given.'
             );
         }
 
         foreach (['header', 'footer'] as $logoKey) {
             if (isset($data['logos'][$logoKey]) && ! is_string($data['logos'][$logoKey])) {
                 throw new InvalidArgumentException(
-                    "PzPdfConfiguration: 'logos.{$logoKey}' deve ser string."
+                    "PzPdfConfiguration: 'logos.{$logoKey}' must be string."
                 );
             }
         }
 
         if (isset($data['paths']['public']) && ! is_string($data['paths']['public'])) {
-            throw new InvalidArgumentException("PzPdfConfiguration: 'paths.public' deve ser string.");
+            throw new InvalidArgumentException("PzPdfConfiguration: 'paths.public' must be string.");
         }
 
         foreach (['locale', 'timezone'] as $dtKey) {
             if (isset($data['datetime'][$dtKey]) && ! is_string($data['datetime'][$dtKey])) {
-                throw new InvalidArgumentException("PzPdfConfiguration: 'datetime.{$dtKey}' deve ser string.");
+                throw new InvalidArgumentException("PzPdfConfiguration: 'datetime.{$dtKey}' must be string.");
             }
         }
     }

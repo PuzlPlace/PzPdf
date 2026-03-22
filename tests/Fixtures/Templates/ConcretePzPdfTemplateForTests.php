@@ -11,6 +11,4 @@ use Puzl\PzPdf\Templates\PzPdfTemplateWriter;
  *
  * @internal
  */
-final class ConcretePzPdfTemplateForTests extends PzPdfTemplateWriter
-{
-}
+final class ConcretePzPdfTemplateForTests extends PzPdfTemplateWriter {}

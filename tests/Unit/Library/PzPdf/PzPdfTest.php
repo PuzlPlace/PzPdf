@@ -21,7 +21,9 @@ use Puzl\PzPdf\Enum\PzPdfPageSize;
 use Puzl\PzPdf\Enum\PzPdfTextAlignment;
 use Puzl\PzPdf\Enum\PzPdfTextDirection;
 use Puzl\PzPdf\Exception\PzPdfException;
+use Puzl\PzPdf\Internal\PzPdfFpdfEngine;
 use Puzl\PzPdf\PzPdf;
+use ReflectionClass;
 use Puzl\PzPdf\ValueObject\PzPdfColor;
 use Puzl\PzPdf\ValueObject\PzPdfGradientStop;
 
@@ -33,7 +35,7 @@ use Puzl\PzPdf\ValueObject\PzPdfGradientStop;
 #[CoversClass(PzPdf::class)]
 final class PzPdfTest extends TestCase
 {
-    public function testFluentMethodsReturnSameInstance(): void
+    public function test_fluent_methods_return_same_instance(): void
     {
         $pdf = new PzPdf;
 
@@ -45,7 +47,7 @@ final class PzPdfTest extends TestCase
         self::assertSame($pdf, $chain);
     }
 
-    public function testMmToPointsConversionMatchesTypographicDefinition(): void
+    public function test_mm_to_points_conversion_matches_typographic_definition(): void
     {
         $pdf = new PzPdf;
 
@@ -53,22 +55,22 @@ final class PzPdfTest extends TestCase
         self::assertEqualsWithDelta(25.4, $pdf->pointsToMm(72.0), 0.001);
     }
 
-    public function testPolygonRejectsLessThanThreePoints(): void
+    public function test_polygon_rejects_less_than_three_points(): void
     {
         $pdf = new PzPdf;
 
         $this->expectException(PzPdfException::class);
-        $this->expectExceptionMessage('polygon() requer no mínimo 3 pontos');
+        $this->expectExceptionMessage('polygon() requires at least 3 points');
 
         $pdf->polygon([[0, 0], [1, 1]], 'D');
     }
 
-    public function testAddTrueTypeFontThrowsWhenTtfPathMissing(): void
+    public function test_add_true_type_font_throws_when_ttf_path_missing(): void
     {
         $pdf = new PzPdf;
 
         $this->expectException(PzPdfException::class);
-        $this->expectExceptionMessageMatches('/não encontrado ou ilegível/');
+        $this->expectExceptionMessageMatches('/not found or not readable/');
 
         $pdf->addTrueTypeFont(
             'X',
@@ -77,7 +79,7 @@ final class PzPdfTest extends TestCase
         );
     }
 
-    public function testBulletListReturnsListBuilderAndEndReturnsSamePdf(): void
+    public function test_bullet_list_returns_list_builder_and_end_returns_same_pdf(): void
     {
         $pdf = new PzPdf;
 
@@ -87,7 +89,7 @@ final class PzPdfTest extends TestCase
         self::assertSame($pdf, $list->end());
     }
 
-    public function testMinimalClosedDocumentViaToString(): void
+    public function test_minimal_closed_document_via_to_string(): void
     {
         $binary = (new PzPdf)
             ->addPage(PzPdfPageOrientation::Portrait, PzPdfPageSize::A4)
@@ -98,7 +100,7 @@ final class PzPdfTest extends TestCase
         self::assertStringStartsWith('%PDF', $binary);
     }
 
-    public function testOnHeaderRunsDuringOutputAndProducesPdf(): void
+    public function test_on_header_runs_during_output_and_produces_pdf(): void
     {
         $pdf = (new PzPdf)
             ->onHeader(static function (PzPdf $p): void {
@@ -113,7 +115,7 @@ final class PzPdfTest extends TestCase
         self::assertGreaterThan(200, strlen($out));
     }
 
-    public function testOnFooterRunsDuringOutputAndProducesPdf(): void
+    public function test_on_footer_runs_during_output_and_produces_pdf(): void
     {
         $pdf = (new PzPdf)
             ->onFooter(static function (PzPdf $p): void {
@@ -131,7 +133,7 @@ final class PzPdfTest extends TestCase
     /**
      * Exercita a maior parte da superfície da fachada num único fluxo (paridade com a suíte da referência).
      */
-    public function testWideFacadeSurfaceProducesValidPdf(): void
+    public function test_wide_facade_surface_produces_valid_pdf(): void
     {
         $pngData = base64_decode(
             'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
@@ -286,13 +288,53 @@ final class PzPdfTest extends TestCase
         }
     }
 
-    public function testProtectWithoutAnyPasswordThrowsPzPdfException(): void
+    public function test_protect_without_any_password_throws_pz_pdf_exception(): void
     {
         $pdf = new PzPdf;
 
         $this->expectException(PzPdfException::class);
-        $this->expectExceptionMessage('protect() requer ao menos uma senha');
+        $this->expectExceptionMessage('protect() requires at least one password');
 
         $pdf->protect([], null, null);
+    }
+
+    public function test_constructor_returns_pz_pdf_instance(): void
+    {
+        $pdf = new PzPdf;
+
+        self::assertInstanceOf(PzPdf::class, $pdf);
+    }
+
+    public function test_consecutive_constructors_yield_distinct_engine_instances(): void
+    {
+        $a = new PzPdf;
+        $b = new PzPdf;
+
+        $engineA = $this->extractEngine($a);
+        $engineB = $this->extractEngine($b);
+
+        self::assertNotSame($engineA, $engineB);
+    }
+
+    public function test_operations_on_first_instance_do_not_affect_second_instance_page_count(): void
+    {
+        $first = new PzPdf;
+        $second = new PzPdf;
+
+        $first->addPage();
+
+        self::assertSame(0, $second->pageNo());
+    }
+
+    private function extractEngine(PzPdf $pdf): PzPdfFpdfEngine
+    {
+        $ref = new ReflectionClass($pdf);
+        $prop = $ref->getProperty('engine');
+        $prop->setAccessible(true);
+        $engine = $prop->getValue($pdf);
+
+        self::assertInstanceOf(PzPdfFpdfEngine::class, $engine);
+
+        return $engine;
     }
 }

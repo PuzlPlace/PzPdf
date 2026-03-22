@@ -9,6 +9,4 @@ namespace Puzl\PzPdf\Exception;
  *
  * Exemplo: método equivalente a roundedRect() indisponível na implementação interna.
  */
-class PzPdfUnsupportedOperationException extends PzPdfException
-{
-}
+class PzPdfUnsupportedOperationException extends PzPdfException {}

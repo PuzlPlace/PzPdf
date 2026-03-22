@@ -13,12 +13,12 @@ use Puzl\PzPdf\Internal\PzPdfFpdfEngine;
 
 final class PzPdfFpdfEngineTest extends TestCase
 {
-    public function testImageFitRejectsNonPositiveAreaWidth(): void
+    public function test_image_fit_rejects_non_positive_area_width(): void
     {
-        $engine = new PzPdfFpdfEngine();
+        $engine = new PzPdfFpdfEngine;
 
         $this->expectException(PzPdfException::class);
-        $this->expectExceptionMessage('Largura da área (imageFit)');
+        $this->expectExceptionMessage('Area width (imageFit)');
 
         $engine->imageFit(
             '/nonexistent.png',

@@ -14,7 +14,7 @@ Encoding: ISO-8859-1 (suporte a acentos em português).
 Se precisar regenerar os `.php` e `.z` a partir dos arquivos TTF do Google Fonts:
 
 1. Baixe os TTF em <https://github.com/google/fonts/tree/main/ofl/encodesanscondensed> (Regular e Bold).
-2. Use o makefont do FPDF (ex.: em `vendor_old/fawno/fpdf/fpdf/makefont/` ou copie para `/tmp`):
+2. Use o makefont do FPDF (ex.: em `vendor/fawno/fpdf/fpdf/makefont/` ou copie para `/tmp`):
 
    ```bash
    cd /tmp && cp -r /path/to/fawno/fpdf/fpdf/makefont . && cd makefont

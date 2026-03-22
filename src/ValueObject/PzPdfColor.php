@@ -46,7 +46,7 @@ final readonly class PzPdfColor implements PzPdfColorInterface
 
         if (preg_match('/^[0-9a-fA-F]{6}$/', $normalized) !== 1) {
             throw new PzPdfException(
-                "PzPdfColor: valor hexadecimal '{$hex}' inválido. Formato esperado: '#RRGGBB' ou 'RRGGBB' (6 dígitos hexadecimais)."
+                "PzPdfColor: invalid hexadecimal value '{$hex}'. Expected format: '#RRGGBB' or 'RRGGBB' (6 hexadecimal digits)."
             );
         }
 
@@ -82,7 +82,7 @@ final readonly class PzPdfColor implements PzPdfColorInterface
     {
         if ($value < 0 || $value > 255) {
             throw new PzPdfException(
-                "PzPdfColor: valor de {$name} ({$value}) fora do range 0-255."
+                "PzPdfColor: {$name} value ({$value}) is out of range 0-255."
             );
         }
     }

@@ -31,8 +31,8 @@ final readonly class PzPdfTableColumn
     ) {
         if ($width <= 0.0) {
             throw new PzPdfException(
-                'PzPdfTableColumn: a largura da coluna deve ser maior que zero (mm). '
-                ."Valor recebido: {$width}."
+                'PzPdfTableColumn: column width must be greater than zero (mm). '
+                ."Received value: {$width}."
             );
         }
     }

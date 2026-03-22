@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Puzl\PzPdf;
 
 use Closure;
+use Puzl\PzPdf\Component\PzPdfListBuilder;
 use Puzl\PzPdf\Contract\PzPdfColorInterface;
 use Puzl\PzPdf\Enum\PzPdfDisplayLayout;
 use Puzl\PzPdf\Enum\PzPdfDisplayZoom;
@@ -21,9 +22,7 @@ use Puzl\PzPdf\Enum\PzPdfPermission;
 use Puzl\PzPdf\Enum\PzPdfTextAlignment;
 use Puzl\PzPdf\Enum\PzPdfTextDirection;
 use Puzl\PzPdf\Exception\PzPdfException;
-use Puzl\PzPdf\Exception\PzPdfUnsupportedOperationException;
 use Puzl\PzPdf\Internal\PzPdfFpdfEngine;
-use Puzl\PzPdf\Component\PzPdfListBuilder;
 use Puzl\PzPdf\Service\PzPdfTtfFontCacheConfig;
 use Puzl\PzPdf\Service\PzPdfTtfFontResolver;
 use Puzl\PzPdf\ValueObject\PzPdfPageDimension;
@@ -32,7 +31,7 @@ use Puzl\PzPdf\ValueObject\PzPdfPageDimension;
  * API fluente de alto nível para construção de PDFs.
  *
  * Delega ao motor FPDF interno ({@see PzPdfFpdfEngine}). Cada instância possui
- * engine isolado — use {@see PzPdfFactory::make()} por requisição ou job.
+ * engine isolado — use {@code new PzPdf()} por requisição ou job.
  * Métodos de construção retornam $this para encadeamento; getters retornam valores.
  */
 final class PzPdf
@@ -50,9 +49,9 @@ final class PzPdf
     /**
      * @param  PzPdfFpdfEngine|null  $engine  Motor FPDF; null cria instância nova (isolada).
      */
-    public function __construct(?PzPdfFpdfEngine $engine = null)
+    public function __construct()
     {
-        $this->engine = $engine ?? new PzPdfFpdfEngine;
+        $this->engine = new PzPdfFpdfEngine;
     }
 
     private function ttfFontResolver(): PzPdfTtfFontResolver
@@ -673,8 +672,8 @@ final class PzPdf
     {
         if (count($points) < 3) {
             throw new PzPdfException(
-                'polygon() requer no mínimo 3 pontos, '.count($points).' fornecido(s). '
-                .'Forneça um array com pelo menos 3 pares [x, y].'
+                'polygon() requires at least 3 points, '.count($points).' given. '
+                .'Provide an array with at least 3 [x, y] pairs.'
             );
         }
 
@@ -706,8 +705,8 @@ final class PzPdf
     ): self {
         if ($sides < 3) {
             throw new PzPdfException(
-                "regularPolygon() requer no mínimo 3 lados, {$sides} fornecido(s). "
-                .'Forneça um valor >= 3 para o parâmetro $sides.'
+                "regularPolygon() requires at least 3 sides, {$sides} given. "
+                .'Pass a value >= 3 for the $sides parameter.'
             );
         }
 
@@ -1230,8 +1229,8 @@ final class PzPdf
     ): self {
         if ($userPassword === null && $ownerPassword === null) {
             throw new PzPdfException(
-                'protect() requer ao menos uma senha (userPassword ou ownerPassword). '
-                .'Informe userPassword para exigir senha ao abrir, ou ownerPassword para restringir permissões.'
+                'protect() requires at least one password (userPassword or ownerPassword). '
+                .'Set userPassword to require a password to open, or ownerPassword to restrict permissions.'
             );
         }
 
@@ -1690,7 +1689,7 @@ final class PzPdf
     {
         if ($value < 0.0 || $value > 1.0) {
             throw new PzPdfException(
-                "Opacidade inválida: {$value}. O valor deve estar entre 0.0 e 1.0."
+                "Invalid opacity: {$value}. The value must be between 0.0 and 1.0."
             );
         }
     }

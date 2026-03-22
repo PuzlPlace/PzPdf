@@ -6,6 +6,7 @@ namespace Puzl\PzPdf\Service;
 
 use Composer\InstalledVersions;
 use Puzl\PzPdf\Exception\PzPdfException;
+use Puzl\PzPdf\Internal\PzPdfFpdfEngine;
 use Puzl\PzPdf\ValueObject\PzPdfResolvedTtfFont;
 
 /**
@@ -35,7 +36,7 @@ final class PzPdfTtfFontResolver
 
     private const LOCK = '.lock';
 
-    /** Encoding alinhado ao motor {@see \Puzl\PzPdf\Internal\PzPdfFpdfEngine} (UTF-8 → ISO-8859-1). */
+    /** Encoding alinhado ao motor {@see PzPdfFpdfEngine} (UTF-8 → ISO-8859-1). */
     private const ENCODING = 'iso-8859-1';
 
     /** @var array<string, PzPdfResolvedTtfFont> */
@@ -43,8 +44,7 @@ final class PzPdfTtfFontResolver
 
     public function __construct(
         private readonly ?string $makefontScriptPath = null,
-    ) {
-    }
+    ) {}
 
     public function ensureFpdfFontFiles(string $ttfPath, string $cacheRoot): PzPdfResolvedTtfFont
     {
@@ -53,8 +53,8 @@ final class PzPdfTtfFontResolver
         $realSource = realpath($ttfPath);
         if ($realSource === false || ! is_file($realSource) || ! is_readable($realSource)) {
             throw new PzPdfException(
-                'Arquivo de fonte (.ttf/.otf) não encontrado ou ilegível: '.$ttfPath
-                .'. Use um caminho absoluto ou relativo ao processo atual.'
+                'Font file (.ttf/.otf) not found or not readable: '.$ttfPath
+                .'. Use an absolute path or a path relative to the current working directory.'
             );
         }
 
@@ -66,13 +66,13 @@ final class PzPdfTtfFontResolver
         $ext = strtolower(pathinfo($realSource, PATHINFO_EXTENSION));
         if (! in_array($ext, ['ttf', 'otf'], true)) {
             throw new PzPdfException(
-                'Extensão não suportada para conversão automática (esperado .ttf ou .otf): '.$realSource
+                'Unsupported extension for automatic conversion (expected .ttf or .otf): '.$realSource
             );
         }
 
         $hash = hash_file('sha256', $realSource);
         if ($hash === false) {
-            throw new PzPdfException('Não foi possível calcular o hash do arquivo de fonte: '.$realSource);
+            throw new PzPdfException('Unable to compute hash of font file: '.$realSource);
         }
 
         $entryDir = $cacheRoot.DIRECTORY_SEPARATOR.$hash;
@@ -80,23 +80,23 @@ final class PzPdfTtfFontResolver
 
         if (! is_dir($cacheRoot) && ! mkdir($cacheRoot, 0775, true) && ! is_dir($cacheRoot)) {
             throw new PzPdfException(
-                'Não foi possível criar o diretório de cache de fontes: '.$cacheRoot
-                .'. Verifique permissões ou defina PZPDF_CACHE_DIR / caminho explícito por worker.'
+                'Unable to create font cache directory: '.$cacheRoot
+                .'. Check permissions or set PZPDF_CACHE_DIR / an explicit path per worker.'
             );
         }
 
         if (! is_dir($entryDir) && ! mkdir($entryDir, 0775, true) && ! is_dir($entryDir)) {
-            throw new PzPdfException('Não foi possível criar o diretório de cache da fonte: '.$entryDir);
+            throw new PzPdfException('Unable to create font cache entry directory: '.$entryDir);
         }
 
         $lockHandle = fopen($lockPath, 'c+');
         if ($lockHandle === false) {
-            throw new PzPdfException('Não foi possível abrir o lock de cache de fonte: '.$lockPath);
+            throw new PzPdfException('Unable to open font cache lock file: '.$lockPath);
         }
 
         try {
             if (! flock($lockHandle, LOCK_EX)) {
-                throw new PzPdfException('Não foi possível obter lock exclusivo para o cache de fonte: '.$lockPath);
+                throw new PzPdfException('Unable to acquire exclusive lock for font cache: '.$lockPath);
             }
 
             if ($this->isCacheEntryReady($entryDir, $hash)) {
@@ -175,7 +175,7 @@ final class PzPdfTtfFontResolver
     {
         $workCopy = $entryDir.DIRECTORY_SEPARATOR.self::WORK_COPY;
         if (! copy($realSource, $workCopy)) {
-            throw new PzPdfException('Falha ao copiar fonte temporária para o cache: '.$workCopy);
+            throw new PzPdfException('Failed to copy temporary font into cache: '.$workCopy);
         }
 
         $makefont = $this->resolveMakefontScriptPath();
@@ -202,7 +202,7 @@ final class PzPdfTtfFontResolver
         if (! is_resource($process)) {
             @unlink($workCopy);
 
-            throw new PzPdfException('Não foi possível iniciar o processo makefont para conversão da fonte.');
+            throw new PzPdfException('Unable to start makefont process for font conversion.');
         }
         // @codeCoverageIgnoreEnd
 
@@ -219,8 +219,8 @@ final class PzPdfTtfFontResolver
             $this->cleanBuildArtifacts($entryDir);
             $detail = trim($stderr !== false && $stderr !== '' ? $stderr : (string) $stdout);
             throw new PzPdfException(
-                'makefont falhou ao converter a fonte (código '.$exitCode.'). '
-                .($detail !== '' ? $detail : 'Sem saída de erro.')
+                'makefont failed while converting the font (exit code '.$exitCode.'). '
+                .($detail !== '' ? $detail : 'No error output.')
             );
         }
     }
@@ -231,11 +231,11 @@ final class PzPdfTtfFontResolver
         $z = $entryDir.DIRECTORY_SEPARATOR.self::COMPRESSED;
         if (! is_file($php) || ! is_readable($php) || filesize($php) < 32) {
             $this->cleanBuildArtifacts($entryDir);
-            throw new PzPdfException('makefont não gerou font.php esperado em: '.$php);
+            throw new PzPdfException('makefont did not produce expected font.php at: '.$php);
         }
         if (! is_file($z) || ! is_readable($z) || filesize($z) < 1) {
             $this->cleanBuildArtifacts($entryDir);
-            throw new PzPdfException('makefont não gerou font.z esperado em: '.$z);
+            throw new PzPdfException('makefont did not produce expected font.z at: '.$z);
         }
     }
 
@@ -248,7 +248,7 @@ final class PzPdfTtfFontResolver
         $completePath = $entryDir.DIRECTORY_SEPARATOR.self::COMPLETE;
         if (file_put_contents($completePath, $payload, LOCK_EX) === false) {
             $this->cleanBuildArtifacts($entryDir);
-            throw new PzPdfException('Não foi possível gravar o marcador de cache: '.$completePath);
+            throw new PzPdfException('Unable to write cache completion marker: '.$completePath);
         }
     }
 
@@ -257,7 +257,7 @@ final class PzPdfTtfFontResolver
         if ($this->makefontScriptPath !== null) {
             if (! is_file($this->makefontScriptPath)) {
                 throw new PzPdfException(
-                    'Caminho makefont inválido (arquivo inexistente): '.$this->makefontScriptPath
+                    'Invalid makefont path (file does not exist): '.$this->makefontScriptPath
                 );
             }
 
@@ -287,7 +287,7 @@ final class PzPdfTtfFontResolver
         }
 
         throw new PzPdfException(
-            'Não foi localizado makefont.php do pacote fawno/fpdf. Defina FPDF_MAKEFONT_SCRIPT ou instale fawno/fpdf via Composer.'
+            'Could not locate fawno/fpdf makefont.php. Set FPDF_MAKEFONT_SCRIPT or install fawno/fpdf via Composer.'
         );
     }
 }

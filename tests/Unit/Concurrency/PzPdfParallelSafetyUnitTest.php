@@ -19,7 +19,7 @@ final class PzPdfParallelSafetyUnitTest extends TestCase
         parent::tearDown();
     }
 
-    public function testUniqueTestTokenTakesPrecedenceOverTestTokenForCachePath(): void
+    public function test_unique_test_token_takes_precedence_over_test_token_for_cache_path(): void
     {
         $base = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pzpdf_unit_tok_'.uniqid('', true);
         putenv('PZPDF_CACHE_DIR='.$base);
@@ -32,7 +32,7 @@ final class PzPdfParallelSafetyUnitTest extends TestCase
         self::assertStringNotContainsString('ignored_when_unique_set', $path);
     }
 
-    public function testTestTokenIsolatedPathsDifferForSameBase(): void
+    public function test_test_token_isolated_paths_differ_for_same_base(): void
     {
         $base = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pzpdf_unit_tok2_'.uniqid('', true);
         putenv('PZPDF_CACHE_DIR='.$base);

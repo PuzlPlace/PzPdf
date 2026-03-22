@@ -11,7 +11,7 @@ use Puzl\PzPdf\Enum\PzPdfFontStyle;
 use Puzl\PzPdf\Enum\PzPdfPageOrientation;
 use Puzl\PzPdf\Enum\PzPdfPageSize;
 use Puzl\PzPdf\Exception\PzPdfException;
-use Puzl\PzPdf\PzPdfFactory;
+use Puzl\PzPdf\PzPdf;
 use Puzl\PzPdf\Templates\PzPdfTemplateWriter;
 use Puzl\PzPdf\Tests\Fixtures\Templates\ConcretePzPdfTemplateForTests;
 use Puzl\PzPdf\Tests\Fixtures\Templates\PzPdfTemplateWriterCoverageStub;
@@ -19,7 +19,7 @@ use Puzl\PzPdf\Tests\Fixtures\Templates\PzPdfTemplateWriterCoverageStub;
 #[CoversClass(PzPdfTemplateWriter::class)]
 final class PzPdfTemplateWriterCoverageTest extends TestCase
 {
-    public function testDrawingHelpersExecuteAgainstPdf(): void
+    public function test_drawing_helpers_execute_against_pdf(): void
     {
         $root = dirname(__DIR__, 3);
         $ttf = $root.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
@@ -34,7 +34,7 @@ final class PzPdfTemplateWriterCoverageTest extends TestCase
         try {
             $template = new PzPdfTemplateWriterCoverageStub([]);
 
-            $pdf = PzPdfFactory::make()
+            $pdf = (new PzPdf)
                 ->landscape()
                 ->addPage(PzPdfPageOrientation::Landscape, PzPdfPageSize::A4)
                 ->addTrueTypeFont('Inter', PzPdfFontStyle::Regular, $ttf, $cacheDir)
@@ -51,7 +51,7 @@ final class PzPdfTemplateWriterCoverageTest extends TestCase
         }
     }
 
-    public function testResolveLocalAssetPathWithoutPublicBaseReturnsNull(): void
+    public function test_resolve_local_asset_path_without_public_base_returns_null(): void
     {
         $tpl = new PzPdfTemplateWriterCoverageStub(
             PzPdfConfiguration::fromArray(['paths' => ['public' => '']]),
@@ -60,7 +60,7 @@ final class PzPdfTemplateWriterCoverageTest extends TestCase
         self::assertNull($tpl->resolveLocalForTest('img/x.png'));
     }
 
-    public function testResolveLocalAssetPathWithBaseFindsFile(): void
+    public function test_resolve_local_asset_path_with_base_finds_file(): void
     {
         $dir = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pzpdf_pub_'.uniqid('', true);
         self::assertTrue(mkdir($dir, 0777, true));
@@ -80,7 +80,7 @@ final class PzPdfTemplateWriterCoverageTest extends TestCase
         }
     }
 
-    public function testFromConfigFileThrowsWhenMissing(): void
+    public function test_from_config_file_throws_when_missing(): void
     {
         $this->expectException(PzPdfException::class);
         ConcretePzPdfTemplateForTests::fromConfigFile('/nonexistent/pzpdf.php');

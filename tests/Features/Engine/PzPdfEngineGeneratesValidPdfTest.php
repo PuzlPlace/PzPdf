@@ -15,9 +15,9 @@ use Puzl\PzPdf\ValueObject\PzPdfColor;
 
 final class PzPdfEngineGeneratesValidPdfTest extends TestCase
 {
-    public function testMinimalPdfHasValidHeaderAndEof(): void
+    public function test_minimal_pdf_has_valid_header_and_eof(): void
     {
-        $engine = new PzPdfFpdfEngine();
+        $engine = new PzPdfFpdfEngine;
         $engine->addPage(PzPdfPageOrientation::Portrait, PzPdfPageSize::A4);
         $engine->setFont('Helvetica', PzPdfFontStyle::Regular, 12);
         $engine->cell(40, 10, 'PzPdf engine', 0, 1, PzPdfTextAlignment::Left, false);
@@ -29,9 +29,9 @@ final class PzPdfEngineGeneratesValidPdfTest extends TestCase
         self::assertGreaterThan(400, strlen($binary));
     }
 
-    public function testRectangleWithFillAlphaCompletesWithMeaningfulSize(): void
+    public function test_rectangle_with_fill_alpha_completes_with_meaningful_size(): void
     {
-        $engine = new PzPdfFpdfEngine();
+        $engine = new PzPdfFpdfEngine;
         $engine->addPage(PzPdfPageOrientation::Portrait, PzPdfPageSize::A4);
         $engine->setFillColor(PzPdfColor::rgb(200, 30, 30));
         $engine->setFillAlpha(0.5);

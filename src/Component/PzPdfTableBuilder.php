@@ -28,7 +28,7 @@ use Puzl\PzPdf\ValueObject\PzPdfColor;
  */
 final class PzPdfTableBuilder
 {
-    /** @var list<PzPdfTableColumn> */
+    /** @var array<PzPdfTableColumn> */
     private array $columns = [];
 
     private PzPdfColor $headerBgColor;
@@ -328,7 +328,7 @@ final class PzPdfTableBuilder
     {
         if ($this->columns === []) {
             throw new PzPdfException(
-                'PzPdfTableBuilder: defina as colunas com columns() antes de renderizar ou adicionar linhas.'
+                'PzPdfTableBuilder: define columns with columns() before rendering or adding rows.'
             );
         }
     }

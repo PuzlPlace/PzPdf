@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Puzl\PzPdf\Internal\Trait;
 
 use Puzl\PzPdf\Contract\PzPdfColorInterface;
+use Puzl\PzPdf\Internal\PzPdfFpdfBridge;
 use Puzl\PzPdf\ValueObject\PzPdfCmykColor;
 use Puzl\PzPdf\ValueObject\PzPdfGradientStop;
 
 /**
  * Gradientes linear e radial via Shading no PDF (script FPDF 72, multi-stop).
  *
- * @internal Uso exclusivo em {@see \Puzl\PzPdf\Internal\PzPdfFpdfBridge}.
+ * @internal Uso exclusivo em {@see PzPdfFpdfBridge}.
  */
 trait PzPdfGradientSupport
 {
