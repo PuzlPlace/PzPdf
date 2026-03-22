@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 final class PzPdfNamingConventionTest extends TestCase
 {
-    public function testPublicSurfaceUnderSrcFollowsPzPdfPrefix(): void
+    public function test_public_surface_under_src_follows_pz_pdf_prefix(): void
     {
         $root = dirname(__DIR__, 3);
         $src = $root.DIRECTORY_SEPARATOR.'src';
@@ -22,7 +22,7 @@ final class PzPdfNamingConventionTest extends TestCase
         );
     }
 
-    public function testScannerFlagsClassWithoutPrefix(): void
+    public function test_scanner_flags_class_without_prefix(): void
     {
         $dir = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pzpdf_naming_test_'.uniqid('', true);
         self::assertTrue(mkdir($dir, 0777, true));
@@ -53,7 +53,7 @@ PHP
         }
     }
 
-    public function testScannerIgnoresAnonymousClass(): void
+    public function test_scanner_ignores_anonymous_class(): void
     {
         $php = <<<'PHP'
 <?php

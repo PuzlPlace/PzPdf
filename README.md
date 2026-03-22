@@ -57,9 +57,9 @@ $config = app(PzPdfConfiguration::class);
 declare(strict_types=1);
 
 use Puzl\PzPdf\Enum\PzPdfFontStyle;
-use Puzl\PzPdf\PzPdfFactory;
+use Puzl\PzPdf\PzPdf;
 
-$pdf = PzPdfFactory::make();
+$pdf = new PzPdf;
 
 $binary = $pdf
     ->addPage()

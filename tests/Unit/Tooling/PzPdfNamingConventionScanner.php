@@ -13,7 +13,7 @@ final class PzPdfNamingConventionScanner
     private const PREFIX = 'PzPdf';
 
     /**
-     * @return list<string> mensagens descrevendo violações (vazio = OK)
+     * @return array<string> mensagens descrevendo violações (vazio = OK)
      */
     public static function scanSourceTree(string $srcRoot): array
     {
@@ -70,7 +70,7 @@ final class PzPdfNamingConventionScanner
     }
 
     /**
-     * @return array<string, list<string>> chaves: class, enum, interface, trait
+     * @return array<string, array<string>> chaves: class, enum, interface, trait
      */
     public static function extractTypeNames(string $php): array
     {
@@ -123,7 +123,7 @@ final class PzPdfNamingConventionScanner
     }
 
     /**
-     * @param list<string|array{0: int, 1: string, 2: int}> $tokens
+     * @param  array<string|array{0: int, 1: string, 2: int}>  $tokens
      */
     private static function isAnonymousClassContext(array $tokens, int $classIndex): bool
     {
@@ -147,7 +147,7 @@ final class PzPdfNamingConventionScanner
     }
 
     /**
-     * @param list<string|array{0: int, 1: string, 2: int}> $tokens
+     * @param  array<string|array{0: int, 1: string, 2: int}>  $tokens
      */
     private static function nextStringToken(array $tokens, int $count, int $start): ?string
     {

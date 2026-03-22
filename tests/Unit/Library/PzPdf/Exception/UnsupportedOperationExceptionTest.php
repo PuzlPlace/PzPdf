@@ -13,21 +13,21 @@ use RuntimeException;
 #[CoversClass(PzPdfUnsupportedOperationException::class)]
 final class UnsupportedOperationExceptionTest extends TestCase
 {
-    public function testIsInstanceOfPzPdfException(): void
+    public function test_is_instance_of_pz_pdf_exception(): void
     {
         $exception = new PzPdfUnsupportedOperationException('test');
 
         $this->assertInstanceOf(PzPdfException::class, $exception);
     }
 
-    public function testIsInstanceOfRuntimeException(): void
+    public function test_is_instance_of_runtime_exception(): void
     {
         $exception = new PzPdfUnsupportedOperationException('test');
 
         $this->assertInstanceOf(RuntimeException::class, $exception);
     }
 
-    public function testCanBeConstructedWithMessage(): void
+    public function test_can_be_constructed_with_message(): void
     {
         $message = 'Operation roundedRect() is not supported by this adapter.';
         $exception = new PzPdfUnsupportedOperationException($message);
@@ -35,7 +35,7 @@ final class UnsupportedOperationExceptionTest extends TestCase
         $this->assertSame($message, $exception->getMessage());
     }
 
-    public function testCanBeCaughtAsPzPdfException(): void
+    public function test_can_be_caught_as_pz_pdf_exception(): void
     {
         $caught = false;
 
@@ -48,7 +48,7 @@ final class UnsupportedOperationExceptionTest extends TestCase
         $this->assertTrue($caught);
     }
 
-    public function testCanBeCaughtAsRuntimeException(): void
+    public function test_can_be_caught_as_runtime_exception(): void
     {
         $caught = false;
 

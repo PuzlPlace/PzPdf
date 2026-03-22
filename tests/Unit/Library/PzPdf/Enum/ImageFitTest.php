@@ -26,30 +26,30 @@ final class ImageFitTest extends TestCase
     }
 
     #[DataProvider('casesProvider')]
-    public function testCaseHasCorrectBackedValue(PzPdfImageFit $case, string $expectedValue): void
+    public function test_case_has_correct_backed_value(PzPdfImageFit $case, string $expectedValue): void
     {
         $this->assertSame($expectedValue, $case->value);
     }
 
-    public function testAllCasesExist(): void
+    public function test_all_cases_exist(): void
     {
         $this->assertCount(3, PzPdfImageFit::cases());
     }
 
     #[DataProvider('casesProvider')]
-    public function testFromReturnsCorrectCase(PzPdfImageFit $expectedCase, string $value): void
+    public function test_from_returns_correct_case(PzPdfImageFit $expectedCase, string $value): void
     {
         $this->assertSame($expectedCase, PzPdfImageFit::from($value));
     }
 
-    public function testFromThrowsValueErrorForInvalidValue(): void
+    public function test_from_throws_value_error_for_invalid_value(): void
     {
         $this->expectException(ValueError::class);
 
         PzPdfImageFit::from('invalid');
     }
 
-    public function testTryFromReturnsNullForInvalidValue(): void
+    public function test_try_from_returns_null_for_invalid_value(): void
     {
         $this->assertNull(PzPdfImageFit::tryFrom('invalid'));
     }

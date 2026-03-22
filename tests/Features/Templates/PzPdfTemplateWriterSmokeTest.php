@@ -16,7 +16,7 @@ use Puzl\PzPdf\Tests\Fixtures\Templates\ConcretePzPdfTemplateForTests;
 #[CoversClass(PzPdfTemplateWriter::class)]
 final class PzPdfTemplateWriterSmokeTest extends TestCase
 {
-    public function testSmokeFromPackageConfigFileWithTtfStub(): void
+    public function test_smoke_from_package_config_file_with_ttf_stub(): void
     {
         $root = dirname(__DIR__, 3);
         $ttf = $root.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
@@ -36,7 +36,8 @@ final class PzPdfTemplateWriterSmokeTest extends TestCase
         self::assertTrue(mkdir($cacheDir, 0777, true));
 
         try {
-            $template = new class ($configuration, $ttf, $cacheDir) extends PzPdfTemplateWriter {
+            $template = new class($configuration, $ttf, $cacheDir) extends PzPdfTemplateWriter
+            {
                 public function __construct(
                     PzPdfConfiguration $configuration,
                     private readonly string $ttfPath,
@@ -73,16 +74,12 @@ final class PzPdfTemplateWriterSmokeTest extends TestCase
         }
     }
 
-    public function testCarbonFormatsDateAccordingToLocaleConfig(): void
+    public function test_carbon_formats_date_according_to_locale_config(): void
     {
         Carbon::setTestNow(Carbon::parse('2024-01-10 12:00:00', 'UTC'));
         try {
-            $writer = new class (PzPdfConfiguration::fromArray([
-                'datetime' => [
-                    'locale' => 'en',
-                    'timezone' => 'UTC',
-                ],
-            ])) extends PzPdfTemplateWriter {
+            $writer = new class(PzPdfConfiguration::fromArray(['datetime' => ['locale' => 'en', 'timezone' => 'UTC']])) extends PzPdfTemplateWriter
+            {
                 public function previewSubtitle(): string
                 {
                     $tz = (string) $this->configuration->get('datetime.timezone', 'UTC');
@@ -100,7 +97,7 @@ final class PzPdfTemplateWriterSmokeTest extends TestCase
         }
     }
 
-    public function testStaticFromConfigFileLoadsPackageConfig(): void
+    public function test_static_from_config_file_loads_package_config(): void
     {
         $root = dirname(__DIR__, 3);
         $path = $root.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'pzpdf.php';

@@ -11,7 +11,6 @@ use Puzl\PzPdf\Enum\PzPdfFontStyle;
 use Puzl\PzPdf\Enum\PzPdfTextAlignment;
 use Puzl\PzPdf\Exception\PzPdfException;
 use Puzl\PzPdf\PzPdf;
-use Puzl\PzPdf\PzPdfFactory;
 use Puzl\PzPdf\ValueObject\PzPdfColor;
 
 /**
@@ -147,12 +146,12 @@ abstract class PzPdfTemplateWriter
     {
         $resolved = $path ?? dirname(__DIR__, 2).DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'pzpdf.php';
         if (! is_file($resolved)) {
-            throw new PzPdfException("PzPdfTemplateWriter: arquivo de configuração não encontrado em {$resolved}.");
+            throw new PzPdfException("PzPdfTemplateWriter: configuration file not found at {$resolved}.");
         }
 
         $loaded = require $resolved;
         if (! is_array($loaded)) {
-            throw new PzPdfException('PzPdfTemplateWriter: o arquivo de configuração deve retornar um array.');
+            throw new PzPdfException('PzPdfTemplateWriter: configuration file must return an array.');
         }
 
         /** @var array<string, mixed> $loaded */
@@ -178,7 +177,7 @@ abstract class PzPdfTemplateWriter
         ?string $subtitle = null,
         ?string $topRightText = null,
     ): PzPdf {
-        $pdf = PzPdfFactory::make();
+        $pdf = new PzPdf;
 
         $this->registerFonts($pdf);
 
@@ -216,8 +215,8 @@ abstract class PzPdfTemplateWriter
         $fontsDir = (string) $this->configuration->get('fonts.directory', '');
         if ($fontsDir === '' || ! is_dir($fontsDir)) {
             throw new PzPdfException(
-                'PzPdfTemplateWriter: defina fonts.directory (ex.: variável de ambiente PDF_FONTS_DIR) apontando para o diretório '
-                .'com os arquivos .php/.z gerados pelo MakeFont do FPDF (Inter-Regular.php, Inter-Bold.php).'
+                'PzPdfTemplateWriter: set fonts.directory (e.g. PDF_FONTS_DIR env var) to the directory '
+                .'containing the .php/.z files produced by FPDF MakeFont (Inter-Regular.php, Inter-Bold.php).'
             );
         }
 

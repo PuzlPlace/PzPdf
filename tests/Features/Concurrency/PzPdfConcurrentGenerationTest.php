@@ -15,7 +15,12 @@ final class PzPdfConcurrentGenerationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->workDir = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pzpdf_conc_'.uniqid('', true);
+        $repoRoot = dirname(__DIR__, 3);
+        $baseTmp = $repoRoot.DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'tmp';
+        if (! is_dir($baseTmp)) {
+            mkdir($baseTmp, 0775, true);
+        }
+        $this->workDir = $baseTmp.DIRECTORY_SEPARATOR.'pzpdf_conc_'.uniqid('', true);
         self::assertNotFalse(mkdir($this->workDir, 0700, true));
     }
 
@@ -27,7 +32,7 @@ final class PzPdfConcurrentGenerationTest extends TestCase
         parent::tearDown();
     }
 
-    public function testMultipleWorkerProcessesWriteValidDistinctPdfs(): void
+    public function test_multiple_worker_processes_write_valid_distinct_pdfs(): void
     {
         $repoRoot = dirname(__DIR__, 3);
         $worker = $repoRoot.'/tests/Fixtures/Concurrency/generate_minimal_pdf_worker.php';
@@ -36,7 +41,7 @@ final class PzPdfConcurrentGenerationTest extends TestCase
         $processCount = 4;
         $processes = [];
 
-        for ($i = 0; $i < $processCount; ++$i) {
+        for ($i = 0; $i < $processCount; $i++) {
             $outFile = $this->workDir.DIRECTORY_SEPARATOR.'out_'.$i.'.pdf';
             $cacheDir = $this->workDir.DIRECTORY_SEPARATOR.'cache_'.$i;
             self::assertNotFalse(mkdir($cacheDir, 0700, true));
@@ -85,7 +90,8 @@ final class PzPdfConcurrentGenerationTest extends TestCase
             fclose($item['pipes'][1]);
             fclose($item['pipes'][2]);
             $exitCodes[] = proc_close($item['proc']);
-            if ($stderr !== '' && $stderr !== false) {
+            $residualStderr = $this->filterIgnorableWorkerStderr($stderr);
+            if ($residualStderr !== '') {
                 self::fail('Worker stderr: '.$stderr.' stdout: '.$stdout);
             }
         }
@@ -113,8 +119,33 @@ final class PzPdfConcurrentGenerationTest extends TestCase
     }
 
     /**
+     * Xdebug escreve avisos (ex.: cliente de Step Debug indisponível) no stderr de cada
+     * processo PHP filho; o teste exige stderr “limpo” para detetar falhas reais do worker.
+     */
+    private function filterIgnorableWorkerStderr(string|false $stderr): string
+    {
+        if ($stderr === false || $stderr === '') {
+            return '';
+        }
+
+        $lines = preg_split('/\R/', $stderr) ?: [];
+        $kept = [];
+        foreach ($lines as $line) {
+            $trimmed = trim($line);
+            if ($trimmed === '') {
+                continue;
+            }
+            if (str_starts_with($trimmed, 'Xdebug:')) {
+                continue;
+            }
+            $kept[] = $trimmed;
+        }
+
+        return implode("\n", $kept);
+    }
+
+    /**
      * @param  array<string, string>  $overrides
-     *
      * @return array<string, string>
      */
     private function buildProcessEnvironment(array $overrides): array

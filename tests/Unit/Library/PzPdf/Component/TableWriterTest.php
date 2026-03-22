@@ -16,7 +16,7 @@ use Puzl\PzPdf\ValueObject\PzPdfColor;
 #[CoversClass(PzPdfTableWriter::class)]
 final class TableWriterTest extends TestCase
 {
-    public function testThrowsWhenWritingHeaderWithoutColumns(): void
+    public function test_throws_when_writing_header_without_columns(): void
     {
         $pdf = new PzPdf;
         $pdf->addPage();
@@ -29,7 +29,7 @@ final class TableWriterTest extends TestCase
         $writer->writeHeader();
     }
 
-    public function testMinimumBodyRowHeightForCellsRequiresColumns(): void
+    public function test_minimum_body_row_height_for_cells_requires_columns(): void
     {
         $pdf = new PzPdf;
         $pdf->addPage();
@@ -42,7 +42,7 @@ final class TableWriterTest extends TestCase
         $writer->minimumBodyRowHeightForCells(['x']);
     }
 
-    public function testFluentReturnsSelf(): void
+    public function test_fluent_returns_self(): void
     {
         $pdf = new PzPdf;
         $pdf->addPage();
@@ -54,7 +54,7 @@ final class TableWriterTest extends TestCase
         self::assertSame($w, $w->textColors(PzPdfColor::black(), PzPdfColor::black()));
     }
 
-    public function testFluentContinued(): void
+    public function test_fluent_continued(): void
     {
         $pdf = new PzPdf;
         $pdf->addPage();
@@ -68,7 +68,7 @@ final class TableWriterTest extends TestCase
         self::assertSame($w, $w->writeRows([['a'], ['b']]));
     }
 
-    public function testEndReturnsSamePdf(): void
+    public function test_end_returns_same_pdf(): void
     {
         $pdf = new PzPdf;
         $pdf->addPage();
@@ -83,7 +83,7 @@ final class TableWriterTest extends TestCase
         self::assertSame($pdf, $out);
     }
 
-    public function testMinimumBodyRowHeightForWrappedTextIsAtLeastLineHeight(): void
+    public function test_minimum_body_row_height_for_wrapped_text_is_at_least_line_height(): void
     {
         $pdf = new PzPdf;
         $pdf->addPage()->font('Helvetica', PzPdfFontStyle::Regular, 10);

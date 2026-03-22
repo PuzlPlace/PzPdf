@@ -12,7 +12,7 @@ use Puzl\PzPdf\Config\PzPdfConfiguration;
 #[CoversClass(PzPdfConfiguration::class)]
 final class PzPdfConfigurationTest extends TestCase
 {
-    public function testDotPathReturnsNestedValue(): void
+    public function test_dot_path_returns_nested_value(): void
     {
         $config = PzPdfConfiguration::fromArray([
             'a' => ['b' => 1],
@@ -21,7 +21,7 @@ final class PzPdfConfigurationTest extends TestCase
         self::assertSame(1, $config->get('a.b'));
     }
 
-    public function testDotPathMissingReturnsTypedDefault(): void
+    public function test_dot_path_missing_returns_typed_default(): void
     {
         $config = PzPdfConfiguration::fromArray([]);
 
@@ -29,17 +29,17 @@ final class PzPdfConfigurationTest extends TestCase
         self::assertSame('fallback', $config->get('x', 'fallback'));
     }
 
-    public function testRejectsNonArrayFontsSection(): void
+    public function test_rejects_non_array_fonts_section(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("a chave 'fonts' deve ser do tipo array");
+        $this->expectExceptionMessage("key 'fonts' must be of type array");
 
         PzPdfConfiguration::fromArray([
             'fonts' => '/tmp',
         ]);
     }
 
-    public function testRejectsNonStringFontsDirectory(): void
+    public function test_rejects_non_string_fonts_directory(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('fonts.directory');
@@ -51,7 +51,7 @@ final class PzPdfConfigurationTest extends TestCase
         ]);
     }
 
-    public function testToArrayRoundTrip(): void
+    public function test_to_array_round_trip(): void
     {
         $data = ['k' => ['v' => true]];
         $config = PzPdfConfiguration::fromArray($data);
@@ -59,7 +59,7 @@ final class PzPdfConfigurationTest extends TestCase
         self::assertSame($data, $config->toArray());
     }
 
-    public function testPackageConfigContainsExpectedTopLevelKeys(): void
+    public function test_package_config_contains_expected_top_level_keys(): void
     {
         /** @var array<string, mixed> $pkg */
         $pkg = require dirname(__DIR__, 3).'/config/pzpdf.php';

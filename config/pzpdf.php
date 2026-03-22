@@ -1,15 +1,17 @@
 <?php
 
 declare(strict_types=1);
+use Puzl\PzPdf\Config\PzPdfConfiguration;
+use Puzl\PzPdf\Templates\PzPdfTemplateWriter;
 
 $packageRoot = dirname(__DIR__);
 $imgDir = $packageRoot.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'img';
 
 /**
- * Configuração portátil do PzPdf (espelha a árvore de chaves usada por {@see \Puzl\PzPdf\Config\PzPdfConfiguration}).
+ * Configuração portátil do PzPdf (espelha a árvore de chaves usada por {@see PzPdfConfiguration}).
  *
  * Fora do Laravel, injete paths via variáveis de ambiente ou mescle este retorno com um array
- * no construtor de {@see \Puzl\PzPdf\Templates\PzPdfTemplateWriter} / {@see \Puzl\PzPdf\Config\PzPdfConfiguration::fromArray()}.
+ * no construtor de {@see PzPdfTemplateWriter} / {@see PzPdfConfiguration::fromArray()}.
  *
  * Com Laravel, use {@code php artisan pzpdf:install} para publicar {@code config/pzpdf.php} no app
  * (ajusta {@code paths.public} para {@code public_path()}).
@@ -17,7 +19,7 @@ $imgDir = $packageRoot.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'img';
  * Variáveis suportadas nos defaults:
  * - {@code PDF_FONTS_DIR}: diretório com arquivos .php/.z (MakeFont) da família Inter
  * - {@code PZPDF_HEADER_LOGO_PATH}, {@code PZPDF_FOOTER_LOGO_PATH}: logos absolutas
- * - {@code PZPDF_PUBLIC_PATH}: raiz para {@see \Puzl\PzPdf\Templates\PzPdfTemplateWriter::resolveLocalAssetPath()}
+ * - {@code PZPDF_PUBLIC_PATH}: raiz para {@see PzPdfTemplateWriter::resolveLocalAssetPath()}
  * - {@code PZPDF_LOCALE}, {@code PZPDF_TIMEZONE}: Carbon no subtítulo padrão do template
  */
 return [

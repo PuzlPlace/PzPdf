@@ -15,7 +15,7 @@ use Puzl\PzPdf\PzPdf;
 #[CoversNothing]
 final class PzPdfTtfIntegrationTest extends TestCase
 {
-    public function testPdfWithTrueTypeFontRenders(): void
+    public function test_pdf_with_true_type_font_renders(): void
     {
         $root = dirname(__DIR__, 3);
         $font = $root.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'

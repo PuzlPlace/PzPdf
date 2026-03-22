@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Puzl\PzPdf\Internal\Trait;
 
+use Puzl\PzPdf\Internal\PzPdfFpdfBridge;
+
 /**
  * Transparência (opacidade) via objetos ExtGState no PDF.
  *
  * Baseado no script FPDF 74. Combinações (fillAlpha, strokeAlpha, blendMode) são
  * reutilizadas em cache interno. Requer PDF 1.4+ (ajustado em _enddoc).
  *
- * @internal Uso exclusivo em {@see \Puzl\PzPdf\Internal\PzPdfFpdfBridge}.
+ * @internal Uso exclusivo em {@see PzPdfFpdfBridge}.
  */
 trait PzPdfAlphaSupport
 {

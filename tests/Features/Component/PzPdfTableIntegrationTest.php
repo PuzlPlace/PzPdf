@@ -11,14 +11,14 @@ use Puzl\PzPdf\Component\PzPdfTableColumn;
 use Puzl\PzPdf\Component\PzPdfTableWriter;
 use Puzl\PzPdf\Enum\PzPdfFontStyle;
 use Puzl\PzPdf\Enum\PzPdfTextAlignment;
-use Puzl\PzPdf\PzPdfFactory;
+use Puzl\PzPdf\PzPdf;
 
 #[CoversClass(PzPdfTableWriter::class)]
 final class PzPdfTableIntegrationTest extends TestCase
 {
-    public function testTableWithMultipleRowsAndBordersProducesValidPdf(): void
+    public function test_table_with_multiple_rows_and_borders_produces_valid_pdf(): void
     {
-        $pdf = PzPdfFactory::make();
+        $pdf = new PzPdf;
         $pdf->margins(15, 20, 15, 20)
             ->addPage()
             ->font('Helvetica', PzPdfFontStyle::Regular, 9);
@@ -47,9 +47,9 @@ final class PzPdfTableIntegrationTest extends TestCase
         self::assertGreaterThanOrEqual(1, preg_match_all('/\/Type\s*\/Page[^s]/', $raw));
     }
 
-    public function testTableBuilderWithPageBreakRedrawsHeader(): void
+    public function test_table_builder_with_page_break_redraws_header(): void
     {
-        $pdf = PzPdfFactory::make();
+        $pdf = new PzPdf;
         $pdf->landscape()
             ->margins(10, 25, 10, 10)
             ->autoPageBreak(true, 20)

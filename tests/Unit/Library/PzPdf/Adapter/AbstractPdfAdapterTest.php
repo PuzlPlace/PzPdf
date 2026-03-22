@@ -11,47 +11,48 @@ use Puzl\PzPdf\Enum\PzPdfOutputMode;
 use Puzl\PzPdf\Enum\PzPdfPageOrientation;
 use Puzl\PzPdf\Enum\PzPdfPageSize;
 use Puzl\PzPdf\Enum\PzPdfTextAlignment;
+use Puzl\PzPdf\Internal\PzPdfFpdfEngine;
 use Puzl\PzPdf\PzPdf;
 
 /**
  * Porte de {@see \Tests\Unit\Library\PzPdf\Adapter\AbstractPdfAdapterTest} da referência `api`.
  * A classe abstrata `AbstractPdfAdapter` e o contrato `PdfAdapterInterface` não existem neste pacote;
- * o motor é sempre {@see \Puzl\PzPdf\Internal\PzPdfFpdfEngine} atrás da fachada {@see PzPdf}.
+ * o motor é sempre {@see PzPdfFpdfEngine} atrás da fachada {@see PzPdf}.
  * Estes testes preservam as asserções **observáveis** equivalentes: callbacks header/footer,
  * conversões métricas e geração PDF válida (em vez de “unsupported by default” no adapter stub).
  */
 #[CoversClass(PzPdf::class)]
 final class AbstractPdfAdapterTest extends TestCase
 {
-    public function testMmToPointsReturnsCorrectValue(): void
+    public function test_mm_to_points_returns_correct_value(): void
     {
         $pdf = new PzPdf;
 
         self::assertEqualsWithDelta(72.0, $pdf->mmToPoints(25.4), 0.0001);
     }
 
-    public function testPointsToMmReturnsCorrectValue(): void
+    public function test_points_to_mm_returns_correct_value(): void
     {
         $pdf = new PzPdf;
 
         self::assertEqualsWithDelta(25.4, $pdf->pointsToMm(72.0), 0.0001);
     }
 
-    public function testCmToPointsReturnsCorrectValue(): void
+    public function test_cm_to_points_returns_correct_value(): void
     {
         $pdf = new PzPdf;
 
         self::assertEqualsWithDelta(72.0, $pdf->cmToPoints(2.54), 0.0001);
     }
 
-    public function testInchesToPointsReturnsCorrectValue(): void
+    public function test_inches_to_points_returns_correct_value(): void
     {
         $pdf = new PzPdf;
 
         self::assertEqualsWithDelta(72.0, $pdf->inchesToPoints(1.0), 0.0001);
     }
 
-    public function testHeaderAndFooterCallbacksAreInvokedOnOutput(): void
+    public function test_header_and_footer_callbacks_are_invoked_on_output(): void
     {
         $headerRan = false;
         $footerRan = false;

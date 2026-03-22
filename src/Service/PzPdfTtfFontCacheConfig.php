@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Puzl\PzPdf\Service;
 
 use Puzl\PzPdf\Exception\PzPdfException;
+use Puzl\PzPdf\PzPdf;
 
 /**
  * Resolve o diretório raiz de cache para conversão TTF/OTF → artefatos FPDF (font.php + font.z).
@@ -18,7 +19,7 @@ use Puzl\PzPdf\Exception\PzPdfException;
  * apontando para volume local rápido ou isole cache por worker/PID conforme política de deploy.
  *
  * Ordem de precedência:
- * 1. Argumento explícito em {@see \Puzl\PzPdf\PzPdf::addTrueTypeFont()} (sem sufixo de token)
+ * 1. Argumento explícito em {@see PzPdf::addTrueTypeFont()} (sem sufixo de token)
  * 2. Variável de ambiente {@see getenv('PZPDF_CACHE_DIR')} + subpasta `ttf-fonts` (+ token se houver)
  * 3. {@see getenv('PZPDF_TTF_CACHE')} (paridade com apps que já usam a chave legada) (+ token)
  * 4. {@see sys_get_temp_dir()} + `/pzpdf-cache/ttf-fonts` (+ token)
@@ -38,7 +39,7 @@ final class PzPdfTtfFontCacheConfig
             $normalized = self::normalizePath($explicit);
             if (is_file($normalized)) {
                 throw new PzPdfException(
-                    'Caminho de cache de fontes deve ser um diretório, não um arquivo: '.$normalized
+                    'Font cache path must be a directory, not a file: '.$normalized
                 );
             }
 

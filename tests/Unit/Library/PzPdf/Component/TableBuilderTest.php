@@ -29,7 +29,7 @@ final class TableBuilderTest extends TestCase
         $this->table = new PzPdfTableBuilder($this->pdf);
     }
 
-    public function testRenderHeaderWithoutColumnsThrows(): void
+    public function test_render_header_without_columns_throws(): void
     {
         $this->expectException(PzPdfException::class);
         $this->expectExceptionMessage('columns()');
@@ -37,7 +37,7 @@ final class TableBuilderTest extends TestCase
         $this->table->renderHeader();
     }
 
-    public function testFluentChainsReturnSameInstance(): void
+    public function test_fluent_chains_return_same_instance(): void
     {
         $c = new PzPdfTableColumn('A', 50);
 
@@ -52,14 +52,14 @@ final class TableBuilderTest extends TestCase
         self::assertSame($this->table, $t);
     }
 
-    public function testEndReturnsOriginalPdf(): void
+    public function test_end_returns_original_pdf(): void
     {
         $this->table->columns(new PzPdfTableColumn('Col', 40))->renderHeader();
 
         self::assertSame($this->pdf, $this->table->end());
     }
 
-    public function testAddRowPadsMissingCells(): void
+    public function test_add_row_pads_missing_cells(): void
     {
         $this->table
             ->columns(
@@ -72,7 +72,7 @@ final class TableBuilderTest extends TestCase
         self::assertSame($this->pdf, $this->table->end());
     }
 
-    public function testMultipleColumnsAlignment(): void
+    public function test_multiple_columns_alignment(): void
     {
         $this->table
             ->columns(
@@ -86,7 +86,7 @@ final class TableBuilderTest extends TestCase
         self::assertSame($this->pdf, $this->table->end());
     }
 
-    public function testAddRowsIterates(): void
+    public function test_add_rows_iterates(): void
     {
         $this->table
             ->columns(new PzPdfTableColumn('C', 50))
@@ -96,7 +96,7 @@ final class TableBuilderTest extends TestCase
         self::assertSame($this->pdf, $this->table->end());
     }
 
-    public function testSeparatorsAndRowFill(): void
+    public function test_separators_and_row_fill(): void
     {
         $this->table
             ->columns(new PzPdfTableColumn('C', 50))
@@ -108,7 +108,7 @@ final class TableBuilderTest extends TestCase
         self::assertSame($this->pdf, $this->table->end());
     }
 
-    public function testDrawSeparatorStandalone(): void
+    public function test_draw_separator_standalone(): void
     {
         $this->table
             ->columns(new PzPdfTableColumn('C', 40))
@@ -118,7 +118,7 @@ final class TableBuilderTest extends TestCase
         self::assertSame($this->pdf, $this->table->end());
     }
 
-    public function testAutoPageBreakDisabledAllowsTallContent(): void
+    public function test_auto_page_break_disabled_allows_tall_content(): void
     {
         $this->table
             ->columns(new PzPdfTableColumn('C', 50))

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Puzl\PzPdf\Service;
 
+use Fawno\FPDF\FawnoFPDF;
+
 /**
- * Descobre o tipo real de imagem em disco para encaixar na API {@see \Fawno\FPDF\FawnoFPDF::Image()}
+ * Descobre o tipo real de imagem em disco para encaixar na API {@see FawnoFPDF::Image()}
  * (tipos `jpg`, `png`, `gif`) ou, quando necessário, delega via GD.
  *
  * Retorna sempre um dos modos {@see self::MODE_FILE} (caminho + tipo FPDF) ou {@see self::MODE_GD}

@@ -13,13 +13,13 @@ use Puzl\PzPdf\Tests\Fixtures\Reports\BillReceiveReportPzPdfWriter;
  * Gera o mesmo PDF que o caminho PzPdf de {@code BillReceiveReportJob}, com dados sintéticos
  * suficientes para pelo menos três páginas (quebras automáticas + repetição de cabeçalho).
  *
- * O arquivo em {@code tests/Fixtures/output/bill_receive_report_pzpdf_min_3_pages.pdf} é mantido de propósito
+ * O arquivo em {@code storage/app/bill_receive_report_pzpdf_min_3_pages.pdf} é mantido de propósito
  * (não há {@code unlink} nem teardown) para inspeção manual após rodar o teste.
  */
 #[CoversClass(BillReceiveReportPzPdfWriter::class)]
 final class BillReceiveReportPzPdfWriterThreePagesTest extends TestCase
 {
-    public function testGeraRelatorioContasReceberComNoMinimoTresPaginasUsandoConfigPzpdf(): void
+    public function test_gera_relatorio_contas_receber_com_no_minimo_tres_paginas_usando_config_pzpdf(): void
     {
         $root = dirname(__DIR__, 3);
         $configPath = $root.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'pzpdf.php';
@@ -84,7 +84,7 @@ final class BillReceiveReportPzPdfWriterThreePagesTest extends TestCase
         $pageMarkers = preg_match_all('/\/Type\s*\/Page[^s]/', $binary);
         self::assertGreaterThanOrEqual(3, $pageMarkers, 'O relatório deve ocupar no mínimo 3 páginas.');
 
-        $outDir = $root.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'output';
+        $outDir = $root.DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR.'app';
         if (! is_dir($outDir)) {
             mkdir($outDir, 0775, true);
         }
@@ -97,7 +97,7 @@ final class BillReceiveReportPzPdfWriterThreePagesTest extends TestCase
     }
 
     /**
-     * @return list<array<string, mixed>>
+     * @return array<array<string, mixed>>
      */
     private function buildSyntheticEntityGroups(int $rowsPerGroup, int $groupCount): array
     {

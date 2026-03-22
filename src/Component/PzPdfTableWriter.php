@@ -32,7 +32,7 @@ use Puzl\PzPdf\ValueObject\PzPdfColor;
  */
 final class PzPdfTableWriter
 {
-    /** @var list<PzPdfTableColumn> */
+    /** @var array<PzPdfTableColumn> */
     private array $columns = [];
 
     private float $startX = 0.0;
@@ -279,7 +279,7 @@ final class PzPdfTableWriter
     {
         if ($this->columns === []) {
             throw new PzPdfException(
-                'PzPdfTableWriter: defina as colunas com columns() antes de escrever a tabela.'
+                'PzPdfTableWriter: define columns with columns() before writing the table.'
             );
         }
     }

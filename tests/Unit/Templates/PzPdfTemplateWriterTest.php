@@ -13,7 +13,7 @@ use Puzl\PzPdf\Tests\Fixtures\Templates\PzPdfTemplateWriterTestStub;
 #[CoversClass(PzPdfTemplateWriter::class)]
 final class PzPdfTemplateWriterTest extends TestCase
 {
-    public function testStubAppliesBaseColorsFromConfig(): void
+    public function test_stub_applies_base_colors_from_config(): void
     {
         $config = PzPdfConfiguration::fromArray([
             'colors' => [
