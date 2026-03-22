@@ -1,5 +1,5 @@
 {
-    "name": "puzl/pzpdf-fpdf",
+    "name": "puzl/pzpdf",
     "description": "Fluent PDF wrapper built on FPDF for the Puzl ecosystem",
     "type": "library",
     "license": "proprietary",

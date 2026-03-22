@@ -10,7 +10,7 @@ final class PzPdfInstallCommand extends Command
 {
     protected $signature = 'pzpdf:install
                             {--force : Sobrescreve arquivos já publicados}
-                            {--no-assets : Não copia logos para public/vendor/puzl/pzpdf-fpdf/img}';
+                            {--no-assets : Não copia logos para public/vendor/puzl/pzpdf/img}';
 
     protected $description = 'Publica config/pzpdf.php no app Laravel e, por padrão, copia logos para public/vendor (opcional)';
 
@@ -31,7 +31,7 @@ final class PzPdfInstallCommand extends Command
         $this->newLine();
         $this->info('PzPdf: config em config/pzpdf.php (sobreponha valores ou use .env conforme o docblock do pacote).');
         if (! $this->option('no-assets')) {
-            $this->comment('Assets em public/vendor/puzl/pzpdf-fpdf/img — opcional; o PDF já usa os arquivos dentro de vendor por padrão.');
+            $this->comment('Assets em public/vendor/puzl/pzpdf/img — opcional; o PDF já usa os arquivos dentro de vendor por padrão.');
         }
 
         return self::SUCCESS;

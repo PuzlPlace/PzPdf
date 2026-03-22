@@ -1,4 +1,4 @@
-# puzl/pzpdf-fpdf (PzPdf)
+# puzl/pzpdf (PzPdf)
 
 Biblioteca PHP **PzPdf**: API fluente para PDF com **FPDF** (`fawno/fpdf`), pensada para o ecossistema Puzl. Cada documento deve ser criado via fábrica para **isolamento** entre requisições, jobs e workers.
 
@@ -22,17 +22,17 @@ Repositório privado (exemplo):
         }
     ],
     "require": {
-        "puzl/pzpdf-fpdf": "dev-main"
+        "puzl/pzpdf": "dev-main"
     }
 }
 ```
 
 ```bash
-composer require puzl/pzpdf-fpdf
+composer require puzl/pzpdf
 php artisan pzpdf:install
 ```
 
-O pacote regista automaticamente o `PzPdfServiceProvider` (via `extra.laravel` no Composer). O comando `pzpdf:install` publica `config/pzpdf.php` e, por defeito, copia logos para `public/vendor/puzl/pzpdf-fpdf/img` (opcional para URLs públicas; o PDF usa os ficheiros em `vendor` por defeito).
+O pacote regista automaticamente o `PzPdfServiceProvider` (via `extra.laravel` no Composer). O comando `pzpdf:install` publica `config/pzpdf.php` e, por defeito, copia logos para `public/vendor/puzl/pzpdf/img` (opcional para URLs públicas; o PDF usa os ficheiros em `vendor` por defeito).
 
 Opções:
 

@@ -46,7 +46,7 @@ Sem Composer, autoload e configuração de testes, nenhum código `PzPdf*` pode 
 ## Subtarefas
 
 ### 1. Composer e autoload
-**Descrição**: Criar `composer.json` com nome de pacote acordado pelo time (ex.: `puzl/pzpdf-fpdf`), `require` e `require-dev` alinhados à Tech Spec, e mapeamento PSR-4.
+**Descrição**: Criar `composer.json` com nome de pacote acordado pelo time (ex.: `puzl/pzpdf`), `require` e `require-dev` alinhados à Tech Spec, e mapeamento PSR-4.
 **Arquivos afetados**:
 - `composer.json`
 

@@ -333,7 +333,7 @@ UTF-8 na API pública; datas no template via Carbon como na referência; locale 
 
 | Tema | Decisão |
 |------|---------|
-| Namespace / pacote | **`Puzl\PzPdf`** com PSR-4 `src/`; nome Composer sugerido **`puzl/pzpdf-fpdf`** (ajustável pelo time antes do primeiro `composer publish`). |
+| Namespace / pacote | **`Puzl\PzPdf`** com PSR-4 `src/`; nome Composer sugerido **`puzl/pzpdf`** (ajustável pelo time antes do primeiro `composer publish`). |
 | `getAdapter()` | **Removido** da API pública; lógica permanece em classes **internas finais**. Testes portados **reescrevidos** para não depender do tipo do adapter. |
 | `AdapterType` | **Não** expor como tipo público; factory sem parâmetro de “motor”. |
 | Interfaces | **Mínimas**; nenhuma interface de motor PDF; eventual contrato estreito só para localização de fontes **se** inevitável para mocks. |

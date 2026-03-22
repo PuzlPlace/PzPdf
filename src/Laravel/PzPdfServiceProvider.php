@@ -33,7 +33,7 @@ final class PzPdfServiceProvider extends ServiceProvider
         ], 'pzpdf-config');
 
         $this->publishes([
-            __DIR__.'/../../public/img' => public_path('vendor/puzl/pzpdf-fpdf/img'),
+            __DIR__.'/../../public/img' => public_path('vendor/puzl/pzpdf/img'),
         ], 'pzpdf-assets');
     }
 }
