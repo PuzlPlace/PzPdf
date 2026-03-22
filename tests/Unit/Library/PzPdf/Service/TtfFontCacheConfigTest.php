@@ -33,7 +33,7 @@ final class TtfFontCacheConfigTest extends TestCase
         unset($_ENV['TEST_TOKEN'], $_ENV['UNIQUE_TEST_TOKEN'], $_SERVER['TEST_TOKEN'], $_SERVER['UNIQUE_TEST_TOKEN']);
     }
 
-    public function testReadsPzpdfTtfCacheFromSuperglobalWhenNotInProcessEnv(): void
+    public function test_reads_pzpdf_ttf_cache_from_superglobal_when_not_in_process_env(): void
     {
         putenv('PZPDF_CACHE_DIR');
         putenv('PZPDF_TTF_CACHE');
@@ -48,7 +48,7 @@ final class TtfFontCacheConfigTest extends TestCase
         }
     }
 
-    public function testLegacyPzpdfTtfCacheUsedWhenPzpdfCacheDirUnset(): void
+    public function test_legacy_pzpdf_ttf_cache_used_when_pzpdf_cache_dir_unset(): void
     {
         putenv('PZPDF_CACHE_DIR');
         $legacy = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pzpdf_legacy_ttf_'.uniqid('', true);
@@ -61,14 +61,14 @@ final class TtfFontCacheConfigTest extends TestCase
         self::assertSame($legacy, $resolved);
     }
 
-    public function testExplicitPathRejectsExistingFile(): void
+    public function test_explicit_path_rejects_existing_file(): void
     {
         $file = tempnam(sys_get_temp_dir(), 'pzpdf_cfg_file_');
         self::assertNotFalse($file);
 
         try {
             $this->expectException(PzPdfException::class);
-            $this->expectExceptionMessage('deve ser um diretório');
+            $this->expectExceptionMessage('must be a directory');
 
             PzPdfTtfFontCacheConfig::resolve($file);
         } finally {
@@ -78,7 +78,7 @@ final class TtfFontCacheConfigTest extends TestCase
         }
     }
 
-    public function testExplicitDirectoryNormalized(): void
+    public function test_explicit_directory_normalized(): void
     {
         $dir = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pzpdf_cfg_dir_'.uniqid('', true);
         self::assertTrue(mkdir($dir, 0777, true));
@@ -91,7 +91,7 @@ final class TtfFontCacheConfigTest extends TestCase
         }
     }
 
-    public function testPzpdfCacheDirAppendsTtfFontsSubdirectory(): void
+    public function test_pzpdf_cache_dir_appends_ttf_fonts_subdirectory(): void
     {
         $base = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pzpdf_env_base_'.uniqid('', true);
         putenv('PZPDF_CACHE_DIR='.$base);
@@ -104,7 +104,7 @@ final class TtfFontCacheConfigTest extends TestCase
         self::assertStringEndsWith(DIRECTORY_SEPARATOR.'ttf-fonts', $resolved);
     }
 
-    public function testTestTokenAppendsIsolationSegment(): void
+    public function test_test_token_appends_isolation_segment(): void
     {
         $base = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pzpdf_env_tok_'.uniqid('', true);
         putenv('PZPDF_CACHE_DIR='.$base);
@@ -117,7 +117,7 @@ final class TtfFontCacheConfigTest extends TestCase
         self::assertStringEndsNotWith('worker_a', $base.DIRECTORY_SEPARATOR.'ttf-fonts');
     }
 
-    public function testUniqueTestTokenTakesPrecedenceOverTestToken(): void
+    public function test_unique_test_token_takes_precedence_over_test_token(): void
     {
         $base = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pzpdf_env_utok_'.uniqid('', true);
         putenv('PZPDF_CACHE_DIR='.$base);
@@ -130,7 +130,7 @@ final class TtfFontCacheConfigTest extends TestCase
         self::assertStringNotContainsString('ignored', $resolved);
     }
 
-    public function testExplicitPathIgnoresEnvTokens(): void
+    public function test_explicit_path_ignores_env_tokens(): void
     {
         $dir = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pzpdf_explicit_'.uniqid('', true);
         self::assertTrue(mkdir($dir, 0777, true));

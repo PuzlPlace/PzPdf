@@ -191,7 +191,7 @@
         <a href="#quickstart">Primeiro PDF</a>
         <div class="nav-section">Conceitos</div>
         <a href="#arquitetura">Arquitetura</a>
-        <a href="#factory">Factory e isolamento</a>
+        <a href="#instanciacao">Instanciação e isolamento</a>
         <a href="#templates">Templates</a>
         <div class="nav-section">Operação</div>
         <a href="#concorrencia">Concorrência e cache</a>
@@ -247,9 +247,9 @@ php artisan vendor:publish --tag=pzpdf-assets</code></pre>
 require 'vendor/autoload.php';
 
 use Puzl\PzPdf\Enum\PzPdfFontStyle;
-use Puzl\PzPdf\PzPdfFactory;
+use Puzl\PzPdf\PzPdf;
 
-$pdf = PzPdfFactory::make();
+$pdf = new PzPdf;
 
 $pdf
     -&gt;addPage()
@@ -266,8 +266,8 @@ file_put_contents('saida.pdf', $pdf-&gt;toString());</code></pre>
         <li><strong>PzPdfTemplateWriter</strong> — layout corporativo (barra de cor, logos, rodapé, Inter opcional via MakeFont).</li>
       </ul>
 
-      <h2 id="factory">Factory e isolamento</h2>
-      <p>Cada <code>PzPdfFactory::make()</code> devolve uma instância nova com motor dedicado — adequado a filas, workers e pedidos HTTP em paralelo.
+      <h2 id="instanciacao">Instanciação e isolamento</h2>
+      <p>Cada <code>new PzPdf()</code> devolve uma instância nova com motor dedicado — adequado a filas, workers e pedidos HTTP em paralelo.
         Não há singleton com estado partilhado entre gerações.</p>
 
       <h2 id="templates">Templates e PzPdfConfiguration</h2>

@@ -12,14 +12,14 @@ use RuntimeException;
 #[CoversClass(PzPdfException::class)]
 final class PzPdfExceptionTest extends TestCase
 {
-    public function testIsInstanceOfRuntimeException(): void
+    public function test_is_instance_of_runtime_exception(): void
     {
         $exception = new PzPdfException('test');
 
         $this->assertInstanceOf(RuntimeException::class, $exception);
     }
 
-    public function testCanBeConstructedWithMessage(): void
+    public function test_can_be_constructed_with_message(): void
     {
         $message = 'PzPdfColor: valor de red (300) fora do range 0-255.';
         $exception = new PzPdfException($message);
@@ -27,7 +27,7 @@ final class PzPdfExceptionTest extends TestCase
         $this->assertSame($message, $exception->getMessage());
     }
 
-    public function testCanBeConstructedWithMessageAndCode(): void
+    public function test_can_be_constructed_with_message_and_code(): void
     {
         $exception = new PzPdfException('error', 42);
 
@@ -35,7 +35,7 @@ final class PzPdfExceptionTest extends TestCase
         $this->assertSame(42, $exception->getCode());
     }
 
-    public function testCanBeCaughtAsRuntimeException(): void
+    public function test_can_be_caught_as_runtime_exception(): void
     {
         $caught = false;
 

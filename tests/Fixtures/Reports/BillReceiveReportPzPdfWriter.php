@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Puzl\PzPdf\Tests\Fixtures\Reports;
 
+use App\Models\Financial\BillReceive\Enum\BillReceiveTypeEnum;
+use App\Models\Financial\BillReceive\Enum\ReportGroupingTypeEnum;
 use Carbon\Carbon;
 use Puzl\PzPdf\Config\PzPdfConfiguration;
 use Puzl\PzPdf\Enum\PzPdfFontStyle;
@@ -47,12 +49,12 @@ final class BillReceiveReportPzPdfWriter extends PzPdfTemplateWriter
 
     private const CLIENT_NAME_MAX_CHARS = 35;
 
-    /** {@see \App\Models\Financial\BillReceive\Enum\BillReceiveTypeEnum} */
+    /** {@see BillReceiveTypeEnum} */
     private const BILL_RECEIVE_ENTITY_CREDITS = 0;
 
     private const BILL_RECEIVE_CONTRACT_PAYMENTS = 1;
 
-    /** {@see \App\Models\Financial\BillReceive\Enum\ReportGroupingTypeEnum::ENTITY} */
+    /** {@see ReportGroupingTypeEnum::ENTITY} */
     private const GROUPING_ENTITY = 1;
 
     private PzPdfColor $badgeParcelColor;

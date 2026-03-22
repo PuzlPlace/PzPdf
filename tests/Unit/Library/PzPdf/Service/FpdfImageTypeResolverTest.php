@@ -11,7 +11,7 @@ use Puzl\PzPdf\Service\PzPdfFpdfImageTypeResolver;
 #[CoversClass(PzPdfFpdfImageTypeResolver::class)]
 final class FpdfImageTypeResolverTest extends TestCase
 {
-    public function testDetectsPngByMagicBytes(): void
+    public function test_detects_png_by_magic_bytes(): void
     {
         $path = $this->writeTempImage(
             base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', true),
@@ -27,7 +27,7 @@ final class FpdfImageTypeResolverTest extends TestCase
         }
     }
 
-    public function testDetectsJpegByMagicBytes(): void
+    public function test_detects_jpeg_by_magic_bytes(): void
     {
         if (! function_exists('imagecreatetruecolor')) {
             self::markTestSkipped('ext-gd necessário para gerar JPEG de teste.');
@@ -48,7 +48,7 @@ final class FpdfImageTypeResolverTest extends TestCase
         }
     }
 
-    public function testDetectsGifByMagicBytes(): void
+    public function test_detects_gif_by_magic_bytes(): void
     {
         $gif = base64_decode('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', true);
         self::assertNotFalse($gif);
@@ -63,14 +63,14 @@ final class FpdfImageTypeResolverTest extends TestCase
         }
     }
 
-    public function testMissingFileReturnsUnknownType(): void
+    public function test_missing_file_returns_unknown_type(): void
     {
         $r = PzPdfFpdfImageTypeResolver::resolve('/no/such/image_'.uniqid().'.png');
         self::assertSame(PzPdfFpdfImageTypeResolver::MODE_FILE, $r['mode']);
         self::assertSame('', $r['type']);
     }
 
-    public function testWebpFallsBackToGdWhenRasterSupported(): void
+    public function test_webp_falls_back_to_gd_when_raster_supported(): void
     {
         if (! function_exists('imagecreatetruecolor') || ! function_exists('imagewebp')) {
             self::markTestSkipped('ext-gd com imagewebp necessário.');

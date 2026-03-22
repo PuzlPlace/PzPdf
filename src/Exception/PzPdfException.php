@@ -11,6 +11,4 @@ use RuntimeException;
  *
  * Mensagens seguem o padrão: "o que falhou" + "como corrigir".
  */
-class PzPdfException extends RuntimeException
-{
-}
+class PzPdfException extends RuntimeException {}

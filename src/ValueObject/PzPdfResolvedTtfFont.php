@@ -16,6 +16,5 @@ final readonly class PzPdfResolvedTtfFont
     public function __construct(
         public string $cacheDirectory,
         public string $definitionFileName = 'font.php',
-    ) {
-    }
+    ) {}
 }

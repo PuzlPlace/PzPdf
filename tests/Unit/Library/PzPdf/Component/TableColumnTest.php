@@ -13,7 +13,7 @@ use Puzl\PzPdf\Exception\PzPdfException;
 #[CoversClass(PzPdfTableColumn::class)]
 final class TableColumnTest extends TestCase
 {
-    public function testCreationWithNamedArgs(): void
+    public function test_creation_with_named_args(): void
     {
         $column = new PzPdfTableColumn(label: 'Nome', width: 50, align: PzPdfTextAlignment::Left);
 
@@ -22,14 +22,14 @@ final class TableColumnTest extends TestCase
         self::assertSame(PzPdfTextAlignment::Left, $column->align);
     }
 
-    public function testDefaultAlignmentIsLeft(): void
+    public function test_default_alignment_is_left(): void
     {
         $column = new PzPdfTableColumn(label: 'Nome', width: 50);
 
         self::assertSame(PzPdfTextAlignment::Left, $column->align);
     }
 
-    public function testCreationWithCenterAlignment(): void
+    public function test_creation_with_center_alignment(): void
     {
         $column = new PzPdfTableColumn(label: 'Status', width: 30, align: PzPdfTextAlignment::Center);
 
@@ -38,7 +38,7 @@ final class TableColumnTest extends TestCase
         self::assertSame(PzPdfTextAlignment::Center, $column->align);
     }
 
-    public function testCreationWithRightAlignment(): void
+    public function test_creation_with_right_alignment(): void
     {
         $column = new PzPdfTableColumn(label: 'Valor', width: 40, align: PzPdfTextAlignment::Right);
 
@@ -47,29 +47,29 @@ final class TableColumnTest extends TestCase
         self::assertSame(PzPdfTextAlignment::Right, $column->align);
     }
 
-    public function testCreationWithAccentedLabel(): void
+    public function test_creation_with_accented_label(): void
     {
         $column = new PzPdfTableColumn(label: 'Descrição', width: 60);
 
         self::assertSame('Descrição', $column->label);
     }
 
-    public function testZeroWidthThrowsPzPdfException(): void
+    public function test_zero_width_throws_pz_pdf_exception(): void
     {
         $this->expectException(PzPdfException::class);
-        $this->expectExceptionMessage('largura');
+        $this->expectExceptionMessage('column width');
 
         new PzPdfTableColumn(label: 'X', width: 0);
     }
 
-    public function testNegativeWidthThrowsPzPdfException(): void
+    public function test_negative_width_throws_pz_pdf_exception(): void
     {
         $this->expectException(PzPdfException::class);
 
         new PzPdfTableColumn(label: 'X', width: -1.5);
     }
 
-    public function testCreationWithDecimalWidth(): void
+    public function test_creation_with_decimal_width(): void
     {
         $column = new PzPdfTableColumn(label: 'Preciso', width: 33.5);
 

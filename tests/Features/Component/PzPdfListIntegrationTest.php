@@ -8,14 +8,14 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Puzl\PzPdf\Component\PzPdfListBuilder;
 use Puzl\PzPdf\Enum\PzPdfFontStyle;
-use Puzl\PzPdf\PzPdfFactory;
+use Puzl\PzPdf\PzPdf;
 
 #[CoversClass(PzPdfListBuilder::class)]
 final class PzPdfListIntegrationTest extends TestCase
 {
-    public function testListWithNestedItemsProducesValidPdf(): void
+    public function test_list_with_nested_items_produces_valid_pdf(): void
     {
-        $pdf = PzPdfFactory::make();
+        $pdf = new PzPdf;
         $pdf->margins(20, 25, 20, 25)
             ->addPage()
             ->font('Helvetica', PzPdfFontStyle::Regular, 11)

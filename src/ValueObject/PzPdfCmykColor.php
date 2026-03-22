@@ -52,8 +52,8 @@ final readonly class PzPdfCmykColor implements PzPdfColorInterface
     {
         if ($value < 0 || $value > 100) {
             throw new PzPdfException(
-                "Componente CMYK '{$name}' inválido: {$value}. "
-                .'O valor deve estar entre 0 e 100.'
+                "Invalid CMYK component '{$name}': {$value}. "
+                .'The value must be between 0 and 100.'
             );
         }
     }

@@ -14,7 +14,7 @@ use Puzl\PzPdf\PzPdf;
 #[CoversNothing]
 final class PzPdfImageIntegrationTest extends TestCase
 {
-    public function testPdfWithEmbeddedRasterImage(): void
+    public function test_pdf_with_embedded_raster_image(): void
     {
         $png = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', true);
         self::assertNotFalse($png);

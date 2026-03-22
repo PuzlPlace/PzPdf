@@ -13,7 +13,7 @@ use Puzl\PzPdf\ValueObject\PzPdfResolvedTtfFont;
 #[CoversClass(PzPdfTtfFontResolver::class)]
 final class TtfFontResolverTest extends TestCase
 {
-    public function testRejectsMissingFontFile(): void
+    public function test_rejects_missing_font_file(): void
     {
         $resolver = new PzPdfTtfFontResolver;
         $cache = sys_get_temp_dir().DIRECTORY_SEPARATOR.'pzpdf_unit_cache_'.uniqid('', true);
@@ -21,7 +21,7 @@ final class TtfFontResolverTest extends TestCase
 
         try {
             $this->expectException(PzPdfException::class);
-            $this->expectExceptionMessage('não encontrado ou ilegível');
+            $this->expectExceptionMessage('not found or not readable');
 
             $resolver->ensureFpdfFontFiles(
                 sys_get_temp_dir().DIRECTORY_SEPARATOR.'missing_font_'.uniqid('', true).'.ttf',
@@ -32,7 +32,7 @@ final class TtfFontResolverTest extends TestCase
         }
     }
 
-    public function testRejectsUnsupportedExtension(): void
+    public function test_rejects_unsupported_extension(): void
     {
         $path = tempnam(sys_get_temp_dir(), 'pzpdf_font_txt_');
         self::assertNotFalse($path);
@@ -44,7 +44,7 @@ final class TtfFontResolverTest extends TestCase
 
         try {
             $this->expectException(PzPdfException::class);
-            $this->expectExceptionMessage('Extensão não suportada');
+            $this->expectExceptionMessage('Unsupported extension');
 
             $resolver->ensureFpdfFontFiles($path, $cache);
         } finally {
@@ -53,7 +53,7 @@ final class TtfFontResolverTest extends TestCase
         }
     }
 
-    public function testThrowsWhenInjectedMakefontScriptMissing(): void
+    public function test_throws_when_injected_makefont_script_missing(): void
     {
         $projectRoot = dirname(__DIR__, 5);
         $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
@@ -72,7 +72,7 @@ final class TtfFontResolverTest extends TestCase
 
         try {
             $this->expectException(PzPdfException::class);
-            $this->expectExceptionMessageMatches('/makefont inválido/');
+            $this->expectExceptionMessageMatches('/Invalid makefont path/');
 
             $resolver->ensureFpdfFontFiles($font, $cache);
         } finally {
@@ -80,7 +80,7 @@ final class TtfFontResolverTest extends TestCase
         }
     }
 
-    public function testThrowsWhenMakefontProducesTinyFontPhp(): void
+    public function test_throws_when_makefont_produces_tiny_font_php(): void
     {
         $projectRoot = dirname(__DIR__, 5);
         $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
@@ -113,7 +113,7 @@ PHP
 
         try {
             $this->expectException(PzPdfException::class);
-            $this->expectExceptionMessage('font.php esperado');
+            $this->expectExceptionMessage('expected font.php');
 
             $resolver->ensureFpdfFontFiles($font, $cache);
         } finally {
@@ -122,7 +122,7 @@ PHP
         }
     }
 
-    public function testThrowsWhenMakefontProducesEmptyFontZ(): void
+    public function test_throws_when_makefont_produces_empty_font_z(): void
     {
         $projectRoot = dirname(__DIR__, 5);
         $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
@@ -155,7 +155,7 @@ PHP
 
         try {
             $this->expectException(PzPdfException::class);
-            $this->expectExceptionMessage('font.z esperado');
+            $this->expectExceptionMessage('expected font.z');
 
             $resolver->ensureFpdfFontFiles($font, $cache);
         } finally {
@@ -164,7 +164,7 @@ PHP
         }
     }
 
-    public function testMakefontProcessFailureThrowsWithExitCode(): void
+    public function test_makefont_process_failure_throws_with_exit_code(): void
     {
         $projectRoot = dirname(__DIR__, 5);
         $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
@@ -186,7 +186,7 @@ PHP
 
         try {
             $this->expectException(PzPdfException::class);
-            $this->expectExceptionMessageMatches('/makefont falhou/');
+            $this->expectExceptionMessageMatches('/makefont failed/');
 
             $resolver->ensureFpdfFontFiles($font, $cache);
         } finally {
@@ -195,7 +195,7 @@ PHP
         }
     }
 
-    public function testRebuildsWhenCompleteMarkerJsonIsInvalid(): void
+    public function test_rebuilds_when_complete_marker_json_is_invalid(): void
     {
         $projectRoot = dirname(__DIR__, 5);
         $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
@@ -222,7 +222,7 @@ PHP
         }
     }
 
-    public function testRebuildsWhenCompleteMarkerVersionIsStale(): void
+    public function test_rebuilds_when_complete_marker_version_is_stale(): void
     {
         $projectRoot = dirname(__DIR__, 5);
         $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
@@ -255,7 +255,7 @@ PHP
         }
     }
 
-    public function testRebuildsWhenCompleteMarkerSha256Mismatch(): void
+    public function test_rebuilds_when_complete_marker_sha256_mismatch(): void
     {
         $projectRoot = dirname(__DIR__, 5);
         $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'
@@ -287,7 +287,7 @@ PHP
         }
     }
 
-    public function testInstanceCacheReturnsSameObjectForRepeatedCalls(): void
+    public function test_instance_cache_returns_same_object_for_repeated_calls(): void
     {
         $projectRoot = dirname(__DIR__, 5);
         $font = $projectRoot.DIRECTORY_SEPARATOR.'tests'.DIRECTORY_SEPARATOR.'Fixtures'.DIRECTORY_SEPARATOR.'fonts'

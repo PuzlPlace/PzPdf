@@ -9,13 +9,14 @@ use Kaareln\SVGPathData\Attributes\PathData\Line;
 use Kaareln\SVGPathData\Attributes\PathData\Move;
 use Kaareln\SVGPathData\Attributes\SVGPathData;
 use PHPUnit\Framework\TestCase;
+use Puzl\PzPdf\Internal\PzPdfFpdfEngine;
 
 /**
  * Mesmo path usado nos testes unitários da referência (PzPdfTest / svgPath).
  */
 final class PathParsingTest extends TestCase
 {
-    public function testReferencePathParsesToExpectedCommandSequence(): void
+    public function test_reference_path_parses_to_expected_command_sequence(): void
     {
         $pathData = 'M 0 0 L 100 100 Z';
         $parsed = SVGPathData::fromString($pathData);
@@ -29,9 +30,9 @@ final class PathParsingTest extends TestCase
     }
 
     /**
-     * Espelha a ordem usada em {@see \Puzl\PzPdf\Internal\PzPdfFpdfEngine} (reverso do iterador).
+     * Espelha a ordem usada em {@see PzPdfFpdfEngine} (reverso do iterador).
      *
-     * @return list<object>
+     * @return array<object>
      */
     private static function collectForwardCommands(SVGPathData $parsed): array
     {

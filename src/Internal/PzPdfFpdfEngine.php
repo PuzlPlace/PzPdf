@@ -5,6 +5,23 @@ declare(strict_types=1);
 namespace Puzl\PzPdf\Internal;
 
 use Closure;
+use Kaareln\SVGPathData\Attributes\PathData\ArcCurve;
+use Kaareln\SVGPathData\Attributes\PathData\BezierCurve;
+use Kaareln\SVGPathData\Attributes\PathData\ClosePath;
+use Kaareln\SVGPathData\Attributes\PathData\HorizontalLine;
+use Kaareln\SVGPathData\Attributes\PathData\Line;
+use Kaareln\SVGPathData\Attributes\PathData\Move;
+use Kaareln\SVGPathData\Attributes\PathData\PathDataCommandInterface;
+use Kaareln\SVGPathData\Attributes\PathData\QuadraticCurve;
+use Kaareln\SVGPathData\Attributes\PathData\RelativeArcCurve;
+use Kaareln\SVGPathData\Attributes\PathData\RelativeBezierCurve;
+use Kaareln\SVGPathData\Attributes\PathData\RelativeHorizontalLine;
+use Kaareln\SVGPathData\Attributes\PathData\RelativeLine;
+use Kaareln\SVGPathData\Attributes\PathData\RelativeMove;
+use Kaareln\SVGPathData\Attributes\PathData\RelativeQuadraticCurve;
+use Kaareln\SVGPathData\Attributes\PathData\RelativeVerticalLine;
+use Kaareln\SVGPathData\Attributes\PathData\VerticalLine;
+use Kaareln\SVGPathData\Attributes\SVGPathData;
 use Puzl\PzPdf\Contract\PzPdfColorInterface;
 use Puzl\PzPdf\Enum\PzPdfDisplayLayout;
 use Puzl\PzPdf\Enum\PzPdfDisplayZoom;
@@ -20,25 +37,10 @@ use Puzl\PzPdf\Enum\PzPdfPageSize;
 use Puzl\PzPdf\Enum\PzPdfTextAlignment;
 use Puzl\PzPdf\Enum\PzPdfTextDirection;
 use Puzl\PzPdf\Exception\PzPdfException;
+use Puzl\PzPdf\PzPdf;
 use Puzl\PzPdf\Service\PzPdfFpdfImageTypeResolver;
 use Puzl\PzPdf\ValueObject\PzPdfGradientStop;
 use Puzl\PzPdf\ValueObject\PzPdfPageDimension;
-use Kaareln\SVGPathData\Attributes\PathData\ArcCurve;
-use Kaareln\SVGPathData\Attributes\PathData\BezierCurve;
-use Kaareln\SVGPathData\Attributes\PathData\ClosePath;
-use Kaareln\SVGPathData\Attributes\PathData\HorizontalLine;
-use Kaareln\SVGPathData\Attributes\PathData\Line;
-use Kaareln\SVGPathData\Attributes\PathData\Move;
-use Kaareln\SVGPathData\Attributes\PathData\QuadraticCurve;
-use Kaareln\SVGPathData\Attributes\PathData\RelativeArcCurve;
-use Kaareln\SVGPathData\Attributes\PathData\RelativeBezierCurve;
-use Kaareln\SVGPathData\Attributes\PathData\RelativeHorizontalLine;
-use Kaareln\SVGPathData\Attributes\PathData\RelativeLine;
-use Kaareln\SVGPathData\Attributes\PathData\RelativeMove;
-use Kaareln\SVGPathData\Attributes\PathData\RelativeQuadraticCurve;
-use Kaareln\SVGPathData\Attributes\PathData\RelativeVerticalLine;
-use Kaareln\SVGPathData\Attributes\PathData\VerticalLine;
-use Kaareln\SVGPathData\Attributes\SVGPathData;
 
 /**
  * Orquestra operações de baixo nível sobre FPDF (texto, vetorial, alpha, gradientes).
@@ -46,7 +48,7 @@ use Kaareln\SVGPathData\Attributes\SVGPathData;
  * Texto de entrada em UTF-8 é convertido para ISO-8859-1 antes de chamar FPDF.
  * Uma instância por documento — FPDF não é seguro entre threads/processos compartilhados.
  *
- * @internal Consumo pela fachada {@see \Puzl\PzPdf\PzPdf} (Task 4.0); não é API pública estável.
+ * @internal Consumo pela fachada {@see PzPdf} (Task 4.0); não é API pública estável.
  */
 final class PzPdfFpdfEngine
 {
@@ -74,56 +76,47 @@ final class PzPdfFpdfEngine
         'Tabloid' => [279.4, 431.8],
     ];
 
-    /** {@inheritDoc} */
     public function addPage(PzPdfPageOrientation $orientation, PzPdfPageSize $size): void
     {
         $sizeParam = self::EXTENDED_PAGE_SIZES[$size->value] ?? $size->value;
         $this->bridge->AddPage($orientation->value, $sizeParam);
     }
 
-    /** {@inheritDoc} */
     public function getPageWidth(): float
     {
         return $this->bridge->GetPageWidth();
     }
 
-    /** {@inheritDoc} */
     public function getPageHeight(): float
     {
         return $this->bridge->GetPageHeight();
     }
 
-    /** {@inheritDoc} */
     public function pageNo(): int
     {
         return $this->bridge->PageNo();
     }
 
-    /** {@inheritDoc} */
     public function aliasNbPages(string $alias = '{nb}'): void
     {
         $this->bridge->AliasNbPages($this->encode($alias));
     }
 
-    /** {@inheritDoc} */
     public function setFont(string $family, PzPdfFontStyle $style, float $size): void
     {
         $this->bridge->SetFont($family, $style->value, $size);
     }
 
-    /** {@inheritDoc} */
     public function addFont(string $family, PzPdfFontStyle $style, string $file, string $dir = ''): void
     {
         $this->bridge->AddFont($family, $style->value, $file, $dir);
     }
 
-    /** {@inheritDoc} */
     public function getStringWidth(string $text): float
     {
         return $this->bridge->GetStringWidth($this->encode($text));
     }
 
-    /** {@inheritDoc} */
     public function cell(
         float $w,
         float $h,
@@ -146,7 +139,6 @@ final class PzPdfFpdfEngine
         );
     }
 
-    /** {@inheritDoc} */
     public function multiCell(
         float $w,
         float $h,
@@ -165,163 +157,136 @@ final class PzPdfFpdfEngine
         );
     }
 
-    /** {@inheritDoc} */
     public function ln(float $h): void
     {
         $this->bridge->Ln($h);
     }
 
-    /** {@inheritDoc} */
     public function setXY(float $x, float $y): void
     {
         $this->bridge->SetXY($x, $y);
     }
 
-    /** {@inheritDoc} */
     public function getX(): float
     {
         return $this->bridge->GetX();
     }
 
-    /** {@inheritDoc} */
     public function getY(): float
     {
         return $this->bridge->GetY();
     }
 
-    /** {@inheritDoc} */
     public function setMargins(float $left, float $top, float $right): void
     {
         $this->bridge->SetMargins($left, $top, $right);
     }
 
-    /** {@inheritDoc} */
     public function setAutoPageBreak(bool $auto, float $margin): void
     {
         $this->bridge->SetAutoPageBreak($auto, $margin);
     }
 
-    /** {@inheritDoc} */
     public function line(float $x1, float $y1, float $x2, float $y2): void
     {
         $this->bridge->Line($x1, $y1, $x2, $y2);
     }
 
-    /** {@inheritDoc} */
     public function rect(float $x, float $y, float $w, float $h, string $style): void
     {
         $this->bridge->Rect($x, $y, $w, $h, $style);
     }
 
-    /** {@inheritDoc} */
     public function roundedRect(float $x, float $y, float $w, float $h, float $radius, string $style): void
     {
         $this->bridge->RoundedRect($x, $y, $w, $h, $radius, '1111', $style);
     }
 
-    /** {@inheritDoc} */
     public function setLineWidth(float $width): void
     {
         $this->bridge->SetLineWidth($width);
     }
 
-    /** {@inheritDoc} */
     public function setDrawColor(PzPdfColorInterface $color): void
     {
         $this->bridge->SetDrawColor(...$color->toArray());
     }
 
-    /** {@inheritDoc} */
     public function setFillColor(PzPdfColorInterface $color): void
     {
         $this->bridge->SetFillColor(...$color->toArray());
     }
 
-    /** {@inheritDoc} */
     public function setTextColor(PzPdfColorInterface $color): void
     {
         $this->bridge->SetTextColor(...$color->toArray());
     }
 
-    /** {@inheritDoc} */
     public function image(string $file, float $x, float $y, float $w, float $h, string $type, string|int $link = ''): void
     {
         $this->putRasterImageFromFile($file, $x, $y, $w, $h, $type, $link);
     }
 
-    /** {@inheritDoc} */
     public function output(string $name, PzPdfOutputMode $mode): string
     {
         return $this->bridge->Output($mode->value, $name);
     }
 
-    /** {@inheritDoc} */
     public function setHeaderCallback(?Closure $callback): void
     {
         $this->bridge->setHeaderCallback($callback);
     }
 
-    /** {@inheritDoc} */
     public function setFooterCallback(?Closure $callback): void
     {
         $this->bridge->setFooterCallback($callback);
     }
 
-    /** {@inheritDoc} */
     public function addPageWithDimension(PzPdfPageOrientation $orientation, PzPdfPageDimension $dimension): void
     {
         $this->bridge->AddPage($orientation->value, $dimension->toFpdfParam());
     }
 
-    /** {@inheritDoc} */
     public function setTitle(string $title): void
     {
         $this->bridge->SetTitle($title, true);
     }
 
-    /** {@inheritDoc} */
     public function setAuthor(string $author): void
     {
         $this->bridge->SetAuthor($author, true);
     }
 
-    /** {@inheritDoc} */
     public function setSubject(string $subject): void
     {
         $this->bridge->SetSubject($subject, true);
     }
 
-    /** {@inheritDoc} */
     public function setKeywords(string $keywords): void
     {
         $this->bridge->SetKeywords($keywords, true);
     }
 
-    /** {@inheritDoc} */
     public function setCreator(string $creator): void
     {
         $this->bridge->SetCreator($creator, true);
     }
 
-    /** {@inheritDoc} */
     public function setDisplayMode(PzPdfDisplayZoom $zoom, PzPdfDisplayLayout $layout): void
     {
         $this->bridge->SetDisplayMode($zoom->value, $layout->value);
     }
 
-    /** {@inheritDoc} */
     public function setLineCap(PzPdfLineCap $cap): void
     {
         $this->bridge->SetLineStyle(['cap' => $cap->value]);
     }
 
-    /** {@inheritDoc} */
     public function setLineJoin(PzPdfLineJoin $join): void
     {
         $this->bridge->SetLineStyle(['join' => $join->value]);
     }
 
-    /** {@inheritDoc} */
     public function setDash(float $length, float $space, float $phase): void
     {
         $resolvedSpace = $space > 0 ? $space : $length;
@@ -332,7 +297,6 @@ final class PzPdfFpdfEngine
         ]);
     }
 
-    /** {@inheritDoc} */
     public function removeDash(): void
     {
         $this->bridge->SetLineStyle(['dash' => '']);
@@ -342,20 +306,18 @@ final class PzPdfFpdfEngine
 
     private int $stateDepth = 0;
 
-    /** {@inheritDoc} */
     public function save(): void
     {
         $this->bridge->StartTransform();
         $this->stateDepth++;
     }
 
-    /** {@inheritDoc} */
     public function restore(): void
     {
         if ($this->stateDepth <= 0) {
             throw new PzPdfException(
-                'Não é possível restaurar o estado gráfico: nenhum save() pendente. '
-                .'Chame pushState() antes de popState().'
+                'Cannot restore graphics state: no pending save(). '
+                .'Call pushState() before popState().'
             );
         }
         $this->bridge->StopTransform();
@@ -364,19 +326,16 @@ final class PzPdfFpdfEngine
 
     // --- Formas vetoriais ---
 
-    /** {@inheritDoc} */
     public function circle(float $x, float $y, float $r, string $style): void
     {
         $this->bridge->Circle($x, $y, $r, 0, 360, $style);
     }
 
-    /** {@inheritDoc} */
     public function ellipse(float $x, float $y, float $rx, float $ry, float $angle, string $style): void
     {
         $this->bridge->Ellipse($x, $y, $rx, $ry, $angle, 0, 360, $style);
     }
 
-    /** {@inheritDoc} */
     public function polygon(array $points, string $style): void
     {
         $flat = [];
@@ -387,19 +346,16 @@ final class PzPdfFpdfEngine
         $this->bridge->Polygon($flat, $style);
     }
 
-    /** {@inheritDoc} */
     public function regularPolygon(float $x, float $y, float $r, int $sides, float $angle, string $style): void
     {
         $this->bridge->RegularPolygon($x, $y, $r, $sides, $angle, false, $style);
     }
 
-    /** {@inheritDoc} */
     public function curve(float $x0, float $y0, float $x1, float $y1, float $x2, float $y2, float $x3, float $y3, string $style): void
     {
         $this->bridge->Curve($x0, $y0, $x1, $y1, $x2, $y2, $x3, $y3, $style);
     }
 
-    /** {@inheritDoc} */
     public function starPolygon(float $x, float $y, float $r, int $nv, int $ng, float $angle, string $style): void
     {
         $this->bridge->StarPolygon($x, $y, $r, $nv, $ng, $angle, false, $style);
@@ -407,43 +363,36 @@ final class PzPdfFpdfEngine
 
     // --- Transformações 2D ---
 
-    /** {@inheritDoc} */
     public function translate(float $x, float $y): void
     {
         $this->bridge->Translate($x, $y);
     }
 
-    /** {@inheritDoc} */
     public function rotate(float $angle, ?float $x = null, ?float $y = null): void
     {
         $this->bridge->Rotate($angle, $x, $y);
     }
 
-    /** {@inheritDoc} */
     public function scale(float $sx, float $sy, ?float $x = null, ?float $y = null): void
     {
         $this->bridge->Scale($sx, $sy, $x, $y);
     }
 
-    /** {@inheritDoc} */
     public function scaleXY(float $s, ?float $x = null, ?float $y = null): void
     {
         $this->bridge->ScaleXY($s, $x, $y);
     }
 
-    /** {@inheritDoc} */
     public function skew(float $ax, float $ay, ?float $x = null, ?float $y = null): void
     {
         $this->bridge->Skew($ax, $ay, $x, $y);
     }
 
-    /** {@inheritDoc} */
     public function mirrorH(?float $x = null): void
     {
         $this->bridge->MirrorH($x);
     }
 
-    /** {@inheritDoc} */
     public function mirrorV(?float $y = null): void
     {
         $this->bridge->MirrorV($y);
@@ -451,25 +400,21 @@ final class PzPdfFpdfEngine
 
     // --- Links ---
 
-    /** {@inheritDoc} */
     public function addLink(): int
     {
         return $this->bridge->AddLink();
     }
 
-    /** {@inheritDoc} */
     public function setLink(int $linkId, float $y, int $page): void
     {
         $this->bridge->SetLink($linkId, $y, $page);
     }
 
-    /** {@inheritDoc} */
     public function link(float $x, float $y, float $w, float $h, string|int $link): void
     {
         $this->bridge->Link($x, $y, $w, $h, $link);
     }
 
-    /** {@inheritDoc} */
     public function write(float $h, string $text, string|int $link = ''): void
     {
         $this->bridge->Write($h, $this->encode($text), $link);
@@ -477,19 +422,16 @@ final class PzPdfFpdfEngine
 
     // --- Texto e imagem rotacionados ---
 
-    /** {@inheritDoc} */
     public function rotatedText(float $x, float $y, string $text, float $angle): void
     {
         $this->bridge->RotatedText($x, $y, $this->encode($text), $angle);
     }
 
-    /** {@inheritDoc} */
     public function rotatedImage(string $file, float $x, float $y, float $w, float $h, float $angle): void
     {
         $this->bridge->RotatedImage($file, $x, $y, $w, $h, $angle);
     }
 
-    /** {@inheritDoc} */
     public function textWithDirection(float $x, float $y, string $text, PzPdfTextDirection $direction): void
     {
         $this->bridge->TextWithDirection($x, $y, $this->encode($text), $direction->value);
@@ -497,7 +439,6 @@ final class PzPdfFpdfEngine
 
     // --- Proteção ---
 
-    /** {@inheritDoc} */
     public function setProtection(array $permissions, ?string $userPass, ?string $ownerPass): void
     {
         $this->bridge->SetProtection($permissions, $userPass ?? '', $ownerPass);
@@ -505,7 +446,6 @@ final class PzPdfFpdfEngine
 
     // --- Bookmarks ---
 
-    /** {@inheritDoc} */
     public function bookmark(string $title, int $level, ?float $y): void
     {
         $this->bridge->Bookmark($title, true, $level, $y ?? -1);
@@ -513,13 +453,11 @@ final class PzPdfFpdfEngine
 
     // --- Imagens em memória ---
 
-    /** {@inheritDoc} */
     public function imageFromString(string $data, float $x, float $y, float $w, float $h): void
     {
         $this->bridge->MemImage($data, $x, $y, $w, $h);
     }
 
-    /** {@inheritDoc} */
     public function imageFromGd(\GdImage $gd, float $x, float $y, float $w, float $h): void
     {
         $this->bridge->GDImage($gd, $x, $y, $w, $h);
@@ -527,19 +465,16 @@ final class PzPdfFpdfEngine
 
     // --- Margens individuais ---
 
-    /** {@inheritDoc} */
     public function setLeftMargin(float $margin): void
     {
         $this->bridge->SetLeftMargin($margin);
     }
 
-    /** {@inheritDoc} */
     public function setTopMargin(float $margin): void
     {
         $this->bridge->SetTopMargin($margin);
     }
 
-    /** {@inheritDoc} */
     public function setRightMargin(float $margin): void
     {
         $this->bridge->SetRightMargin($margin);
@@ -547,7 +482,6 @@ final class PzPdfFpdfEngine
 
     // --- Medição de texto ---
 
-    /** {@inheritDoc} */
     public function getStringHeight(string $text, float $width, float $lineHeight): float
     {
         $text = $this->encode($text);
@@ -580,7 +514,6 @@ final class PzPdfFpdfEngine
 
     // --- Posicionamento avançado de imagens ---
 
-    /** {@inheritDoc} */
     public function imageFit(
         string $file,
         float $x,
@@ -591,14 +524,14 @@ final class PzPdfFpdfEngine
         PzPdfImageAlign $align,
         PzPdfImageValign $valign,
     ): void {
-        $this->assertPositiveDimension($areaW, 'Largura da área (imageFit)');
-        $this->assertPositiveDimension($areaH, 'Altura da área (imageFit)');
+        $this->assertPositiveDimension($areaW, 'Area width (imageFit)');
+        $this->assertPositiveDimension($areaH, 'Area height (imageFit)');
 
         $info = @getimagesize($file);
         if ($info === false) {
             throw new PzPdfException(
-                "imageFit() não conseguiu obter as dimensões da imagem '{$file}'. "
-                .'Verifique se o arquivo existe e é um formato de imagem suportado (PNG, JPEG, GIF).'
+                "imageFit() could not read image dimensions for '{$file}'. "
+                .'Ensure the file exists and is a supported image format (PNG, JPEG, GIF).'
             );
         }
 
@@ -649,14 +582,13 @@ final class PzPdfFpdfEngine
         $this->putRasterImageFromFile($file, $x + $offsetX, $y + $offsetY, $renderW, $renderH);
     }
 
-    /** {@inheritDoc} */
     public function imageScaled(string $file, float $x, float $y, float $scale): void
     {
         $info = @getimagesize($file);
         if ($info === false) {
             throw new PzPdfException(
-                "imageScaled() não conseguiu obter as dimensões da imagem '{$file}'. "
-                .'Verifique se o arquivo existe e é um formato de imagem suportado (PNG, JPEG, GIF).'
+                "imageScaled() could not read image dimensions for '{$file}'. "
+                .'Ensure the file exists and is a supported image format (PNG, JPEG, GIF).'
             );
         }
 
@@ -700,19 +632,16 @@ final class PzPdfFpdfEngine
 
     // --- Barcodes e QR Codes ---
 
-    /** {@inheritDoc} */
     public function barcodeEAN13(float $x, float $y, string $barcode, float $h, float $w): void
     {
         $this->bridge->BarcodeEAN13($x, $y, $barcode, null, false, $w, $h);
     }
 
-    /** {@inheritDoc} */
     public function barcodeCode128(float $x, float $y, string $code, float $w, float $h): void
     {
         $this->bridge->Code128($x, $y, $code, $w, $h);
     }
 
-    /** {@inheritDoc} */
     public function qrCode(float $x, float $y, string $data, float $size): void
     {
         $this->bridge->QRcode($x, $y, $size, $data);
@@ -720,13 +649,11 @@ final class PzPdfFpdfEngine
 
     // --- Anexos ---
 
-    /** {@inheritDoc} */
     public function attach(string $file, string $name, string $desc): void
     {
         $this->bridge->Attach($file, $name, $desc);
     }
 
-    /** {@inheritDoc} */
     public function openAttachmentPane(): void
     {
         $this->bridge->OpenAttachmentPane();
@@ -734,7 +661,6 @@ final class PzPdfFpdfEngine
 
     // --- Assinatura digital ---
 
-    /** {@inheritDoc} */
     public function signatureField(float $x, float $y, float $w, float $h, string $name): void
     {
         $this->bridge->AddSignatureField($x, $y, $w, $h, $name);
@@ -742,7 +668,6 @@ final class PzPdfFpdfEngine
 
     // --- Texto circular ---
 
-    /** {@inheritDoc} */
     public function circularText(float $x, float $y, float $r, string $text, string $align): void
     {
         $this->bridge->CircularText($x, $y, $r, $this->encode($text), $align);
@@ -750,19 +675,16 @@ final class PzPdfFpdfEngine
 
     // --- Opacidade ---
 
-    /** {@inheritDoc} */
     public function setAlpha(float $alpha): void
     {
         $this->bridge->SetAlpha($alpha);
     }
 
-    /** {@inheritDoc} */
     public function setFillAlpha(float $alpha): void
     {
         $this->bridge->SetFillAlpha($alpha);
     }
 
-    /** {@inheritDoc} */
     public function setStrokeAlpha(float $alpha): void
     {
         $this->bridge->SetStrokeAlpha($alpha);
@@ -770,11 +692,10 @@ final class PzPdfFpdfEngine
 
     // --- Clipping paths ---
 
-    /** {@inheritDoc} */
     public function clipRect(float $x, float $y, float $w, float $h): void
     {
-        $this->assertPositiveDimension($w, 'Largura (clipRect)');
-        $this->assertPositiveDimension($h, 'Altura (clipRect)');
+        $this->assertPositiveDimension($w, 'Width (clipRect)');
+        $this->assertPositiveDimension($h, 'Height (clipRect)');
 
         $k = $this->bridge->getScaleFactor();
         $pageH = $this->bridge->getCurrentPageHeight();
@@ -788,13 +709,11 @@ final class PzPdfFpdfEngine
         ));
     }
 
-    /** {@inheritDoc} */
     public function clipCircle(float $x, float $y, float $r): void
     {
         $this->clipEllipse($x, $y, $r, $r);
     }
 
-    /** {@inheritDoc} */
     public function clipEllipse(float $x, float $y, float $rx, float $ry): void
     {
         $kappa = 0.5522847498;
@@ -847,7 +766,6 @@ final class PzPdfFpdfEngine
 
     // --- Gradientes ---
 
-    /** {@inheritDoc} */
     public function linearGradient(
         float $x,
         float $y,
@@ -856,13 +774,12 @@ final class PzPdfFpdfEngine
         array $stops,
         array $coords = [0, 0, 1, 0],
     ): void {
-        $this->assertPositiveDimension($w, 'Largura (linearGradient)');
-        $this->assertPositiveDimension($h, 'Altura (linearGradient)');
+        $this->assertPositiveDimension($w, 'Width (linearGradient)');
+        $this->assertPositiveDimension($h, 'Height (linearGradient)');
         $this->validateGradientStops($stops);
         $this->bridge->LinearGradient($x, $y, $w, $h, $stops, $coords);
     }
 
-    /** {@inheritDoc} */
     public function radialGradient(
         float $x,
         float $y,
@@ -871,8 +788,8 @@ final class PzPdfFpdfEngine
         array $stops,
         array $coords = [0.5, 0.5, 0.5, 0.5, 1],
     ): void {
-        $this->assertPositiveDimension($w, 'Largura (radialGradient)');
-        $this->assertPositiveDimension($h, 'Altura (radialGradient)');
+        $this->assertPositiveDimension($w, 'Width (radialGradient)');
+        $this->assertPositiveDimension($h, 'Height (radialGradient)');
         $this->validateGradientStops($stops);
         $this->bridge->RadialGradient($x, $y, $w, $h, $stops, $coords);
     }
@@ -886,15 +803,15 @@ final class PzPdfFpdfEngine
     {
         if (count($stops) < 2) {
             throw new PzPdfException(
-                'Gradientes requerem no mínimo 2 color stops, '
-                .count($stops).' fornecido(s).'
+                'Gradients require at least 2 color stops, '
+                .count($stops).' given.'
             );
         }
 
         foreach ($stops as $i => $stop) {
             if (! $stop instanceof PzPdfGradientStop) {
                 throw new PzPdfException(
-                    "O item na posição {$i} não é uma instância de PzPdfGradientStop."
+                    "Item at index {$i} is not an instance of PzPdfGradientStop."
                 );
             }
         }
@@ -902,12 +819,11 @@ final class PzPdfFpdfEngine
 
     // --- SVG path ---
 
-    /** {@inheritDoc} */
     public function svgPath(string $pathData, string $style): void
     {
         if (trim($pathData) === '') {
             throw new PzPdfException(
-                'svgPath() requer uma string de path data SVG não vazia.'
+                'svgPath() requires a non-empty SVG path data string.'
             );
         }
 
@@ -915,7 +831,7 @@ final class PzPdfFpdfEngine
             $parsed = SVGPathData::fromString($pathData);
         } catch (\RuntimeException $e) {
             throw new PzPdfException(
-                'Erro ao parsear SVG path data: '.$e->getMessage(),
+                'Failed to parse SVG path data: '.$e->getMessage(),
                 0,
                 $e,
             );
@@ -1060,7 +976,7 @@ final class PzPdfFpdfEngine
     /**
      * Collects SVG path commands from the reverse-linked-list into a forward-ordered array.
      *
-     * @return \Kaareln\SVGPathData\Attributes\PathData\PathDataCommandInterface[]
+     * @return PathDataCommandInterface[]
      */
     private function collectSvgCommands(SVGPathData $parsed): array
     {
@@ -1213,12 +1129,11 @@ final class PzPdfFpdfEngine
 
     // --- Colunas de texto ---
 
-    /** {@inheritDoc} */
     public function textColumns(string $text, int $columns, float $gap, float $w, float $h): void
     {
         if ($columns < 2) {
             throw new PzPdfException(
-                "textColumns() requer no mínimo 2 colunas, {$columns} fornecida(s)."
+                "textColumns() requires at least 2 columns, {$columns} given."
             );
         }
 
@@ -1338,7 +1253,7 @@ final class PzPdfFpdfEngine
     {
         if ($value <= 0) {
             throw new PzPdfException(
-                "{$label} inválida: o valor deve ser maior que zero (recebido: {$value})."
+                "{$label} is invalid: the value must be greater than zero (received: {$value})."
             );
         }
     }

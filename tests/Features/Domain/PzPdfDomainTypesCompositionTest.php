@@ -25,7 +25,7 @@ final class PzPdfDomainTypesCompositionTest extends TestCase
         ];
     }
 
-    public function testColorAndTextAlignmentComposeSerializableCellStyle(): void
+    public function test_color_and_text_alignment_compose_serializable_cell_style(): void
     {
         $fill = PzPdfColor::hex('#337ab7');
         $align = PzPdfTextAlignment::Center;

@@ -11,7 +11,7 @@ use Puzl\PzPdf\Service\PzPdfTtfFontCacheConfig;
 #[CoversNothing]
 final class PzPdfCacheTokenIsolationTest extends TestCase
 {
-    public function testDifferentTestTokensYieldDistinctResolvedCacheRoots(): void
+    public function test_different_test_tokens_yield_distinct_resolved_cache_roots(): void
     {
         $snapshot = [
             'UNIQUE_TEST_TOKEN' => getenv('UNIQUE_TEST_TOKEN'),

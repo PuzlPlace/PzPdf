@@ -8,18 +8,18 @@ use PHPUnit\Framework\TestCase;
 
 final class TestSuiteSmokeTest extends TestCase
 {
-    public function testParatestBinaryIsInstalled(): void
+    public function test_paratest_binary_is_installed(): void
     {
         $root = dirname(__DIR__, 3);
 
-        self::assertFileExists($root . '/vendor/bin/paratest');
-        self::assertFileIsReadable($root . '/vendor/bin/paratest');
+        self::assertFileExists($root.'/vendor/bin/paratest');
+        self::assertFileIsReadable($root.'/vendor/bin/paratest');
     }
 
-    public function testUnitTestsPassViaPhpunitSubprocess(): void
+    public function test_unit_tests_pass_via_phpunit_subprocess(): void
     {
         $root = dirname(__DIR__, 3);
-        $phpunit = $root . '/vendor/bin/phpunit';
+        $phpunit = $root.'/vendor/bin/phpunit';
 
         self::assertFileExists($phpunit);
 
@@ -27,7 +27,7 @@ final class TestSuiteSmokeTest extends TestCase
             PHP_BINARY,
             $phpunit,
             '-c',
-            $root . '/phpunit.xml.dist',
+            $root.'/phpunit.xml.dist',
             '--testsuite',
             'unit',
             '--colors=never',
@@ -55,7 +55,7 @@ final class TestSuiteSmokeTest extends TestCase
             0,
             $exitCode,
             'Expected unit testsuite to pass when run in a subprocess. Output: '
-            . $stdout . $stderr
+            .$stdout.$stderr
         );
     }
 }

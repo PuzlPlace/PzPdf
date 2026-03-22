@@ -25,23 +25,23 @@ final class ListBuilderTest extends TestCase
         $this->list = new PzPdfListBuilder($this->pdf);
     }
 
-    public function testBulletStyleFluent(): void
+    public function test_bullet_style_fluent(): void
     {
         $r = $this->list->bulletStyle('-', 4, 6);
         self::assertSame($this->list, $r);
     }
 
-    public function testLineHeightFluent(): void
+    public function test_line_height_fluent(): void
     {
         self::assertSame($this->list, $this->list->lineHeight(7));
     }
 
-    public function testSubListIndentFluent(): void
+    public function test_sub_list_indent_fluent(): void
     {
         self::assertSame($this->list, $this->list->subListIndent(6));
     }
 
-    public function testItemsRendersWithoutException(): void
+    public function test_items_renders_without_exception(): void
     {
         $this->list
             ->bulletStyle('•', 5, 8)
@@ -51,7 +51,7 @@ final class ListBuilderTest extends TestCase
         self::assertSame($this->pdf, $this->list->end());
     }
 
-    public function testNestedItems(): void
+    public function test_nested_items(): void
     {
         $this->list->items([
             'Root',
@@ -62,7 +62,7 @@ final class ListBuilderTest extends TestCase
         self::assertSame($this->pdf, $this->list->end());
     }
 
-    public function testBulletListOnFacadeReturnsBuilder(): void
+    public function test_bullet_list_on_facade_returns_builder(): void
     {
         $pdf = new PzPdf;
         $pdf->addPage();

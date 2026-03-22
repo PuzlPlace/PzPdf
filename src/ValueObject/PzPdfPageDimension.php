@@ -19,8 +19,7 @@ final readonly class PzPdfPageDimension
         public ?PzPdfPageSize $enum,
         public ?float $width,
         public ?float $height,
-    ) {
-    }
+    ) {}
 
     /**
      * Cria dimensão a partir de um tamanho de página predefinido.
@@ -39,8 +38,8 @@ final readonly class PzPdfPageDimension
     {
         if ($width <= 0 || $height <= 0) {
             throw new PzPdfException(
-                "Dimensões de página inválidas ({$width}×{$height}mm). "
-                .'Ambos largura e altura devem ser maiores que zero.'
+                "Invalid page dimensions ({$width}×{$height}mm). "
+                .'Both width and height must be greater than zero.'
             );
         }
 

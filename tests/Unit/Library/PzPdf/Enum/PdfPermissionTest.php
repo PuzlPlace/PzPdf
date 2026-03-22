@@ -27,30 +27,30 @@ final class PdfPermissionTest extends TestCase
     }
 
     #[DataProvider('casesProvider')]
-    public function testCaseHasCorrectBackedValue(PzPdfPermission $case, string $expectedValue): void
+    public function test_case_has_correct_backed_value(PzPdfPermission $case, string $expectedValue): void
     {
         $this->assertSame($expectedValue, $case->value);
     }
 
-    public function testAllCasesExist(): void
+    public function test_all_cases_exist(): void
     {
         $this->assertCount(4, PzPdfPermission::cases());
     }
 
     #[DataProvider('casesProvider')]
-    public function testFromReturnsCorrectCase(PzPdfPermission $expectedCase, string $value): void
+    public function test_from_returns_correct_case(PzPdfPermission $expectedCase, string $value): void
     {
         $this->assertSame($expectedCase, PzPdfPermission::from($value));
     }
 
-    public function testFromThrowsValueErrorForInvalidValue(): void
+    public function test_from_throws_value_error_for_invalid_value(): void
     {
         $this->expectException(ValueError::class);
 
         PzPdfPermission::from('invalid');
     }
 
-    public function testTryFromReturnsNullForInvalidValue(): void
+    public function test_try_from_returns_null_for_invalid_value(): void
     {
         $this->assertNull(PzPdfPermission::tryFrom('invalid'));
     }
