@@ -12,12 +12,12 @@ use InvalidArgumentException;
  * O método {@see self::get()} aceita retorno e default tipados como {@code mixed} de propósito,
  * para acesso genérico por dot-notation sem perder flexibilidade de valores escalares e aninhados.
  */
-final readonly class PzPdfConfiguration
+final class PzPdfConfiguration
 {
     /**
      * @param  array<string, mixed>  $data
      */
-    public function __construct(private array $data) {}
+    public function __construct(private readonly array $data) {}
 
     /**
      * @param  array<string, mixed>  $data
