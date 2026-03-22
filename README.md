@@ -1,6 +1,6 @@
 # puzl/pzpdf (PzPdf)
 
-Biblioteca PHP **PzPdf**: API fluente para PDF com **FPDF** (`fawno/fpdf`), pensada para o ecossistema Puzl. Cada documento deve ser criado via fábrica para **isolamento** entre requisições, jobs e workers.
+Biblioteca PHP **PzPdf**: API fluente para PDF com **FPDF** (`fawno/fpdf`), pensada para o ecossistema Puzl. Cada documento deve ser criado via fábrica para **isolamento** entre requisições, jobs  e workers.
 
 ## Requisitos
 
