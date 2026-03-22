@@ -90,12 +90,28 @@ Abrir [http://localhost:8765/index.html](http://localhost:8765/index.html).
 - **`PZPDF_CACHE_DIR`**: diretório base para cache (ex.: TTF). Em vários workers no mesmo disco, use diretório por worker ou token de teste.
 - **`TEST_TOKEN`** / ParaTest: a suíte isola subpastas de cache em testes paralelos.
 
-## Validação
+## Testes (PHPUnit)
+
+Na raiz do repositório, instale as dependências (inclui o PHPUnit em `vendor/`):
 
 ```bash
 composer install
-composer test
-composer test:parallel
+```
+
+**Forma direta de rodar a suíte** (não depende do comando `composer` no PATH depois do install — use o executável do PHPUnit):
+
+```bash
+./vendor/bin/phpunit -c phpunit.xml.dist
+```
+
+- `vendor/bin` é uma **pasta**; o programa certo é `vendor/bin/phpunit` (como acima).
+- Se o shebang do binário não for usado no seu ambiente, equivale a: `php vendor/bin/phpunit -c phpunit.xml.dist`.
+
+**Atalhos via Composer** (se `composer` estiver instalado):
+
+```bash
+composer test              # mesmo que phpunit -c phpunit.xml.dist
+composer test:parallel     # Paratest (vários processos)
 ```
 
 ## Estrutura
