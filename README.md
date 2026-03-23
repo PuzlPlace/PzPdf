@@ -48,7 +48,7 @@ Use sempre o branch **`production`** para instalar o pacote num projeto Laravel.
    php artisan pzpdf:install
    ```
 
-O pacote regista automaticamente o `PzPdfServiceProvider` (via `extra.laravel` no Composer). O comando `pzpdf:install` publica `config/pzpdf.php` e, por defeito, copia logos para `public/vendor/puzl/pzpdf/img` (opcional para URLs públicas; o PDF usa os ficheiros em `vendor` por defeito).
+O pacote regista automaticamente o `PzPdfServiceProvider` (via `extra.laravel` no Composer). O comando `pzpdf:install` publica `config/pzpdf.php`.
 
 Opções:
 
@@ -86,20 +86,9 @@ $binary = $pdf
 
 ## Configuração (`config/pzpdf.php`)
 
-O ficheiro do pacote define defaults com caminhos absolutos para `public/img` **dentro do vendor** (logos incluídas). Variáveis de ambiente listadas no docblock do ficheiro continuam a poder sobrepor paths, fontes e locale.
+O ficheiro do pacote define defaults com caminhos absolutos para `public/img` **dentro do vendor**. Variáveis de ambiente listadas no docblock do ficheiro continuam a poder sobrepor paths, fontes e locale.
 
 Em Laravel, o stub publicado mescla esses defaults com `paths.public` = `public_path()`.
-
-## Documentação HTML
-
-Na raiz do repositório:
-
-```bash
-composer install
-php -S localhost:8765 -t docs
-```
-
-Abrir [http://localhost:8765/index.html](http://localhost:8765/index.html).
 
 ## Cache, concorrência e testes paralelos
 
@@ -118,16 +107,6 @@ composer install
 
 ```bash
 ./vendor/bin/phpunit -c phpunit.xml.dist
-```
-
-- `vendor/bin` é uma **pasta**; o programa certo é `vendor/bin/phpunit` (como acima).
-- Se o shebang do binário não for usado no seu ambiente, equivale a: `php vendor/bin/phpunit -c phpunit.xml.dist`.
-
-**Atalhos via Composer** (se `composer` estiver instalado):
-
-```bash
-composer test              # mesmo que phpunit -c phpunit.xml.dist
-composer test:parallel     # Paratest (vários processos)
 ```
 
 ## Estrutura
